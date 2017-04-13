@@ -1,0 +1,5 @@
+# JVM args
+-server -XX:+UseG1GC -XX:+DisableExplicitGC
+
+# Open current config from the visor
+open -cpath=/home/ikonovalov/developer/projects/ignite-showcase/src/main/resources/my-cache.xml

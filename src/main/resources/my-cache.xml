@@ -5,6 +5,7 @@
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="ignite.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+        <property name="gridName" value="TheGrid"/>
         <property name="metricsLogFrequency" value="120000"/>
         <property name="peerClassLoadingEnabled" value="true"/>
         <property name="gridLogger">
