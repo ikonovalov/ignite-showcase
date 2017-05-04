@@ -40,7 +40,7 @@ public class UUIDServiceImpl implements UUIDService, Service {
 
     @Override
     public void execute(ServiceContext ctx) throws Exception {
-
+        log.info("Executing distributed service: {}", svcName);
     }
 
     @Override

@@ -5,6 +5,6 @@ package ru.codeunited.ignite.services;
  */
 public interface UUIDService {
 
-    String toUID(String echo);
+    String toUID(String key);
 
 }

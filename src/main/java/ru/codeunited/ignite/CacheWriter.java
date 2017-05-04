@@ -2,6 +2,8 @@ package ru.codeunited.ignite;
 
 import org.apache.ignite.*;
 import org.apache.ignite.cache.CachePeekMode;
+import org.apache.ignite.cluster.ClusterGroup;
+import ru.codeunited.ignite.services.UUIDServiceImpl;
 
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -29,9 +31,11 @@ public class CacheWriter {
         IgniteCompute compute = ignite.compute(ignite.cluster());
 
 
-        compute.broadcast(() -> System.out.println("33New local cache size " + cache.localSize(CachePeekMode.ALL)));
+        compute.broadcast(() -> System.out.println("New local cache size " + cache.localSize(CachePeekMode.ALL)));
 
-        //Ignition.stop(true);
+        ClusterGroup clusterGroup = ignite.cluster().forOldest();
+        IgniteServices svcs = ignite.services(clusterGroup);
+        svcs.deployNodeSingleton("myUuidService", new UUIDServiceImpl());
     }
 
 }
