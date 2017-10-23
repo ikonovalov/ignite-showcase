@@ -17,15 +17,11 @@ public class CacheWriter {
 
         Ignite ignite = Ignition.start("my-cache.xml");
 
-        IgniteCache<String, ContainerKT> cache = ignite.cache("zzCache");
+        IgniteCache<String, String> cache = ignite.cache("zzCache");
 
         // load zzCache
         IntStream.range(0000, 2000).forEach(
-                i -> cache.put("K" + i, new ContainerKT(
-                        UUID.randomUUID(),
-                        new byte[]{0xF, (byte) i},
-                        2)
-                )
+                i -> cache.put("K" + i, UUID.randomUUID().toString())
         );
 
         IgniteCompute compute = ignite.compute(ignite.cluster());

@@ -1,0 +1,7 @@
+version: '2'
+services:
+  ignite:
+    image: anapsix/alpine-java:latest
+    volumes:
+      - "./target/:/var/run/ignite/:ro"
+    command: java -jar /var/run/ignite/showcase-1.0-SNAPSHOT.jar
