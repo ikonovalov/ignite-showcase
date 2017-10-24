@@ -1,7 +1,7 @@
 version: '2'
 services:
   ignite:
-    image: anapsix/alpine-java:latest
+    image: azul/zulu-openjdk:8
     volumes:
       - "./target/:/var/run/ignite/:ro"
-    command: java -jar /var/run/ignite/showcase-1.0-SNAPSHOT.jar
+    command: java -XX:+DisableExplicitGC -XX:+UseG1GC -Xms512m -Xmx512m -XX:MaxDirectMemorySize=128m -jar /var/run/ignite/showcase-1.0-SNAPSHOT.jar
