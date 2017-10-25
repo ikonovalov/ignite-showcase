@@ -2,6 +2,7 @@ package ru.codeunited.ignite;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.ignite.cache.query.annotations.QueryTextField;
 
 @ToString
 @EqualsAndHashCode
@@ -9,8 +10,10 @@ public class QuestValue {
 
     private long id;
 
+    @QueryTextField
     private String text;
 
+    @QueryTextField
     private String desc;
 
     public QuestValue() {

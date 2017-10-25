@@ -34,27 +34,28 @@ public class Quest {
         cacheConfiguration.setRebalanceMode(SYNC);
         cacheConfiguration.setBackups(2);
         cacheConfiguration.setWriteSynchronizationMode(FULL_SYNC);
+        cacheConfiguration.setIndexedTypes(Long.class, QuestValue.class);
 
         igniteConfiguration.setCacheConfiguration(cacheConfiguration);
 
-        // setup query entries
-        QueryEntity queryEntity = new QueryEntity();
-        queryEntity.setKeyType(Long.class.getName());
-        queryEntity.setValueType(QuestValue.class.getName());
-
-        // fields
-        LinkedHashMap<String, String> fields = new LinkedHashMap<>();
-        fields.put("text", String.class.getName());
-        fields.put("desc", String.class.getName());
-        queryEntity.setFields(fields);
-
-        // indexes
-        Collection<QueryIndex> indexCollection = new ArrayList<>();
-        indexCollection.add(new QueryIndex("text"));
-        indexCollection.add(new QueryIndex("desc"));
-        queryEntity.setIndexes(indexCollection);
-
-        cacheConfiguration.setQueryEntities(Collections.singletonList(queryEntity));
+        // // setup query entries
+        // QueryEntity queryEntity = new QueryEntity();
+        // queryEntity.setKeyType(Long.class.getName());
+        // queryEntity.setValueType(QuestValue.class.getName());
+        //
+        // // fields
+        // LinkedHashMap<String, String> fields = new LinkedHashMap<>();
+        // fields.put("text", String.class.getName());
+        // fields.put("desc", String.class.getName());
+        // queryEntity.setFields(fields);
+        //
+        // // indexes
+        // Collection<QueryIndex> indexCollection = new ArrayList<>();
+        // indexCollection.add(new QueryIndex("text"));
+        // indexCollection.add(new QueryIndex("desc"));
+        // queryEntity.setIndexes(indexCollection);
+        //
+        // cacheConfiguration.setQueryEntities(Collections.singletonList(queryEntity));
 
         // Work
         Ignite ignite = Ignition.start(igniteConfiguration);
@@ -98,7 +99,7 @@ public class Quest {
 
         // try text query
         long s2 = System.currentTimeMillis();
-        TextQuery<Long, QuestValue> txt = new TextQuery<>(QuestValue.class, "%t%");
+        TextQuery<Long, QuestValue> txt = new TextQuery<>(QuestValue.class, "desc: desc*1* AND text: t*1*2*");
         try (QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(txt)) {
             List<Cache.Entry<Long, QuestValue>> all_text = cursor.getAll();
             System.out.println("Text query " + all_text.size() + " records in " + (System.currentTimeMillis() - s2) + "ms");
