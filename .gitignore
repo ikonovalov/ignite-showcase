@@ -19,3 +19,4 @@ ignite-showcase.iml
 src/test/
 target/
 /dependency-reduced-pom.xml
+showcase.iml

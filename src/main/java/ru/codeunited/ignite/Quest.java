@@ -98,7 +98,7 @@ public class Quest {
 
         // try text query
         long s2 = System.currentTimeMillis();
-        TextQuery<Long, QuestValue> txt = new TextQuery<>(QuestValue.class, "text5");
+        TextQuery<Long, QuestValue> txt = new TextQuery<>(QuestValue.class, "%t%");
         try (QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(txt)) {
             List<Cache.Entry<Long, QuestValue>> all_text = cursor.getAll();
             System.out.println("Text query " + all_text.size() + " records in " + (System.currentTimeMillis() - s2) + "ms");
