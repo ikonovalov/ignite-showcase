@@ -1,5 +1,0 @@
-# JVM args
--server -XX:+UseG1GC -XX:+DisableExplicitGC
-
-# Open current config from the visor
-0

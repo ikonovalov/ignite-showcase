@@ -1,11 +1,13 @@
-package ru.codeunited.ignite;
+package ru.codeunited.ignite.model;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.ignite.cache.query.annotations.QueryTextField;
 
 @ToString
 @EqualsAndHashCode
+@Builder
 public class QuestValue {
 
     private long id;
