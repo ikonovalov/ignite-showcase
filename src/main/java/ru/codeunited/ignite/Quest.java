@@ -3,14 +3,13 @@ package ru.codeunited.ignite;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
-import org.apache.ignite.cache.affinity.Affinity;
 import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.ScanQuery;
 import org.apache.ignite.cache.query.TextQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.codeunited.ignite.config.MyCacheConfig;
 import ru.codeunited.ignite.model.QuestValue;
@@ -22,26 +21,34 @@ import java.util.stream.Collectors;
 
 import static ru.codeunited.ignite.config.MyCacheConfig.MY_CACHE;
 
-@RestController("/quest")
+@RestController
+@RequestMapping("/quest")
 @Slf4j
 public class Quest {
 
     private final Ignite ignite;
 
     @Autowired
-    public Quest(Ignite ignite, MyCacheConfig.Loader loader) {
+    public Quest(Ignite ignite, MyCacheConfig.StreamLoader streamLoader) {
         this.ignite = ignite;
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public List<QuestValue> search(@RequestBody String queryText) {
-        IgniteCache<Long, QuestValue> cache = ignite.getOrCreateCache(MY_CACHE);
+        IgniteCache<Long, QuestValue> cache = ignite.cache(MY_CACHE);
         long startMonent = System.currentTimeMillis();
         TextQuery<Long, QuestValue> txt = new TextQuery<>(QuestValue.class, queryText);
         try (QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(txt)) {
             log.debug("Open cursor in {}ms", (System.currentTimeMillis() - startMonent));
             return cursor.getAll().stream().map(Cache.Entry::getValue).collect(Collectors.toList());
         }
+    }
+
+    @PostMapping("/put")
+    public String put(@RequestBody QuestValue value) {
+        IgniteCache<Long, QuestValue> cache = ignite.cache(MY_CACHE);
+        cache.put(value.getId(), value);
+        return "OK";
     }
 
     @PostConstruct
@@ -59,23 +66,15 @@ public class Quest {
         }
 
         // try text query
-        long s2 = System.currentTimeMillis();
+        long startPoint = System.currentTimeMillis();
         TextQuery<Long, QuestValue> txt = new TextQuery<>(QuestValue.class, "desc: desc133* AND text: t*1*2*");
         //TextQuery<Long, QuestValue> txt = new TextQuery<>(QuestValue.class, "desc: [desc100 TO desc110]");
         try (QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(txt)) {
-            List<Cache.Entry<Long, QuestValue>> all_text = cursor.getAll();
-            log.debug("#1 Text query {} records in {}ms", all_text.size(), System.currentTimeMillis() - s2);
-            all_text.forEach(entry -> log.debug("\t{}", entry.getValue()));
-            log.debug("\tTotal entries {}", all_text.size());
+            List<Cache.Entry<Long, QuestValue>> allRecords = cursor.getAll();
+            log.debug("#1 Text query {} records in {}ms", allRecords.size(), System.currentTimeMillis() - startPoint);
+            allRecords.forEach(entry -> log.debug("\t{}", entry.getValue()));
+            log.debug("\tTotal entries {}", allRecords.size());
         }
 
-
-        s2 = System.currentTimeMillis();
-        txt = new TextQuery<>(QuestValue.class, "desc: desc3* AND text: t*3*");
-        try (QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(txt)) {
-            Cache.Entry<Long, QuestValue> next = cursor.iterator().next();
-            log.debug("#2 Text query records in " + (System.currentTimeMillis() - s2) + "ms");
-            log.debug("\t First: " + next.getValue());
-        }
     }
 }

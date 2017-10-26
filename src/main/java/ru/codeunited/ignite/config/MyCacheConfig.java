@@ -38,11 +38,11 @@ public class MyCacheConfig {
 
     @Component
     @Slf4j
-    public static class Loader {
+    public static class StreamLoader {
         private final Ignite ignite;
 
         @Autowired
-        public Loader(Ignite ignite) {
+        public StreamLoader(Ignite ignite) {
             this.ignite = ignite;
         }
 
