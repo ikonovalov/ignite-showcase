@@ -5,6 +5,7 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteDataStreamer;
 import org.apache.ignite.cache.CacheRebalanceMode;
 import org.apache.ignite.cache.CacheWriteSynchronizationMode;
+import org.apache.ignite.cache.affinity.rendezvous.RendezvousAffinityFunction;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ import static org.apache.ignite.cache.CacheAtomicityMode.ATOMIC;
 import static org.apache.ignite.cache.CacheMode.PARTITIONED;
 
 @Configuration
-public class MyCacheConfig {
+public class MyCacheConfiguration {
 
     public static final String MY_CACHE = "MY_CACHE";
 
@@ -31,13 +32,13 @@ public class MyCacheConfig {
         cacheConfiguration.setCacheMode(PARTITIONED);
         cacheConfiguration.setRebalanceMode(CacheRebalanceMode.ASYNC);
         cacheConfiguration.setBackups(0);
-        cacheConfiguration.setWriteSynchronizationMode(CacheWriteSynchronizationMode.FULL_ASYNC);
+        cacheConfiguration.setWriteSynchronizationMode(CacheWriteSynchronizationMode.PRIMARY_SYNC);
+        cacheConfiguration.setAffinity(new RendezvousAffinityFunction(false, 64));
         cacheConfiguration.setIndexedTypes(Long.class, QuestValue.class);
         return cacheConfiguration;
     }
 
-    @Component
-    @Slf4j
+    @Component @Slf4j
     public static class StreamLoader {
         private final Ignite ignite;
 
@@ -48,7 +49,7 @@ public class MyCacheConfig {
 
         @PostConstruct
         public void load() {
-            int maxLoad = 50_000;
+            int maxLoad = 20_000;
             long loadStart = System.currentTimeMillis();
             log.info("Input range [0, " + maxLoad + "]");
             IgniteDataStreamer<Long, QuestValue> dataStreamer = ignite.dataStreamer(MY_CACHE);

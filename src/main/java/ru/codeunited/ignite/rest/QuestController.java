@@ -1,4 +1,4 @@
-package ru.codeunited.ignite;
+package ru.codeunited.ignite.rest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.codeunited.ignite.config.MyCacheConfig;
+import ru.codeunited.ignite.config.MyCacheConfiguration;
 import ru.codeunited.ignite.model.QuestValue;
 
 import javax.annotation.PostConstruct;
@@ -19,17 +19,17 @@ import javax.cache.Cache;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.codeunited.ignite.config.MyCacheConfig.MY_CACHE;
+import static ru.codeunited.ignite.config.MyCacheConfiguration.MY_CACHE;
 
 @RestController
 @RequestMapping("/quest")
 @Slf4j
-public class Quest {
+public class QuestController {
 
     private final Ignite ignite;
 
     @Autowired
-    public Quest(Ignite ignite, MyCacheConfig.StreamLoader streamLoader) {
+    public QuestController(Ignite ignite, MyCacheConfiguration.StreamLoader streamLoader) {
         this.ignite = ignite;
     }
 
