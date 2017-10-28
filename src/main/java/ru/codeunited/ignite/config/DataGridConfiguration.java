@@ -20,20 +20,22 @@ public class DataGridConfiguration {
             PersistentStoreConfiguration persistentStoreConfiguration
     ) {
 
-        IgniteConfiguration configuration = new IgniteConfiguration();
-
-        configuration.setCacheConfiguration(
-                cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()])
-        );
-
-        configuration.setPersistentStoreConfiguration(persistentStoreConfiguration);
+        IgniteConfiguration configuration =
+                new IgniteConfiguration()
+                        .setCacheConfiguration(
+                                cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()])
+                        )
+                        .setPersistentStoreConfiguration(persistentStoreConfiguration);
         return configuration;
     }
 
     @Bean
-    public AffinityFunction affinityFunction(@Value("${ignite.partition.count}") int partitionCount) {
+    public AffinityFunction affinityFunction(
+            @Value("${ignite.partition.count}") int partitionCount
+    ) {
         return new RendezvousAffinityFunction(false, partitionCount);
     }
+
 
     @Bean
     public PersistentStoreConfiguration persistentStoreConfiguration() {

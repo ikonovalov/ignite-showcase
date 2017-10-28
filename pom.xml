@@ -16,11 +16,15 @@
     </parent>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
         <ignite.version>2.2.0</ignite.version>
         <h2.version>1.4.195</h2.version>
+        <jetty.version>9.2.11.v20150529</jetty.version>
     </properties>
 
     <dependencies>
+        <!-- SPRING BOOT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -33,6 +37,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+        </dependency>
+
+        <!-- APACHE IGNITE -->
         <dependency>
             <groupId>org.apache.ignite</groupId>
             <artifactId>ignite-core</artifactId>
@@ -53,6 +63,8 @@
             <artifactId>ignite-slf4j</artifactId>
             <version>${ignite.version}</version>
         </dependency>
+
+        <!-- UTILS -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -66,7 +78,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Testing -->
+        <!-- TESTING-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -79,6 +91,18 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Camden.SR5</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>

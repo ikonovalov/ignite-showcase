@@ -1,5 +1,6 @@
 package ru.codeunited.ignite.rest;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
@@ -7,16 +8,14 @@ import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.ScanQuery;
 import org.apache.ignite.cache.query.TextQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.codeunited.ignite.config.MyCacheConfiguration;
 import ru.codeunited.ignite.model.QuestValue;
 
 import javax.annotation.PostConstruct;
 import javax.cache.Cache;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ru.codeunited.ignite.config.MyCacheConfiguration.MY_CACHE;
@@ -33,9 +32,14 @@ public class QuestController {
         this.ignite = ignite;
     }
 
+    private IgniteCache<Long, QuestValue> cache() {
+        return ignite.cache(MY_CACHE);
+    }
+
     @PostMapping("/search")
+    @HystrixCommand(fallbackMethod = "reliable")
     public List<QuestValue> search(@RequestBody String queryText) {
-        IgniteCache<Long, QuestValue> cache = ignite.cache(MY_CACHE);
+        IgniteCache<Long, QuestValue> cache = cache();
         long startMonent = System.currentTimeMillis();
         TextQuery<Long, QuestValue> txt = new TextQuery<>(QuestValue.class, queryText);
         try (QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(txt)) {
@@ -44,11 +48,24 @@ public class QuestController {
         }
     }
 
-    @PostMapping("/put")
-    public String put(@RequestBody QuestValue value) {
-        IgniteCache<Long, QuestValue> cache = ignite.cache(MY_CACHE);
-        cache.put(value.getId(), value);
-        return "OK";
+    @PostMapping
+    @HystrixCommand(fallbackMethod = "reliable")
+    public Long put(@RequestBody QuestValue value) {
+        IgniteCache<Long, QuestValue> cache = cache();
+        long id = value.getId();
+        cache.put(id, value);
+        return id;
+    }
+
+    @GetMapping("/{id}")
+    @HystrixCommand(fallbackMethod = "reliable")
+    public QuestValue get(@PathVariable("id") Long id) {
+        IgniteCache<Long, QuestValue> cache = cache();
+        return Optional.ofNullable(cache.get(id)).orElseThrow(() -> new RuntimeException(id + " not found"));
+    }
+
+    public String reliable() {
+        return "Data grid not available";
     }
 
     @PostConstruct

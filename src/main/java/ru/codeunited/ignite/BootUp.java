@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 public class BootUp {
 
     @Bean
-    public Ignite ignite(IgniteConfiguration igniteConfiguration) {
+    public Ignite grid(IgniteConfiguration igniteConfiguration) {
         Ignite start = Ignition.start(igniteConfiguration);
         start.active(true);
         return start;

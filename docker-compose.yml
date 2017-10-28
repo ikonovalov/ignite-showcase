@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 
 services:
 
@@ -6,6 +6,7 @@ services:
     image: azul/zulu-openjdk:8
     volumes:
       - "./target/:/var/run/ignite/:ro"
+      - "./etc/:/etc/ignite/:ro"
     ports:
       - "8080"
-    command: java -XX:+DisableExplicitGC -DIGNITE_PERFORMANCE_SUGGESTIONS_DISABLED=true -Xms512m -Xmx512m -XX:MaxDirectMemorySize=128m -jar /var/run/ignite/showcase-1.0-SNAPSHOT.jar
+    command: java -XX:+DisableExplicitGC -Xms512m -Xmx1024m -XX:MaxDirectMemorySize=128m -jar /var/run/ignite/showcase-1.0-SNAPSHOT.jar

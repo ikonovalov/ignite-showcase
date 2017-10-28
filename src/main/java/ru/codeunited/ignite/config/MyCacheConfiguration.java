@@ -2,18 +2,23 @@ package ru.codeunited.ignite.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
+import org.apache.ignite.IgniteCache;
 import org.apache.ignite.IgniteDataStreamer;
 import org.apache.ignite.cache.CacheRebalanceMode;
 import org.apache.ignite.cache.CacheWriteSynchronizationMode;
 import org.apache.ignite.cache.affinity.rendezvous.RendezvousAffinityFunction;
+import org.apache.ignite.cache.query.QueryCursor;
+import org.apache.ignite.cache.query.ScanQuery;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import ru.codeunited.ignite.model.QuestValue;
 
 import javax.annotation.PostConstruct;
+import javax.cache.Cache;
 
 import java.util.stream.IntStream;
 
@@ -40,7 +45,11 @@ public class MyCacheConfiguration {
 
     @Component @Slf4j
     public static class StreamLoader {
+
         private final Ignite ignite;
+
+        @Value("${ignite.cache.my_cache.preload}")
+        private int preload;
 
         @Autowired
         public StreamLoader(Ignite ignite) {
@@ -49,15 +58,38 @@ public class MyCacheConfiguration {
 
         @PostConstruct
         public void load() {
-            int maxLoad = 20_000;
-            long loadStart = System.currentTimeMillis();
-            log.info("Input range [0, " + maxLoad + "]");
-            IgniteDataStreamer<Long, QuestValue> dataStreamer = ignite.dataStreamer(MY_CACHE);
-            dataStreamer.allowOverwrite(false); // default
-            IntStream.range(0, maxLoad).forEach(
-                    i -> dataStreamer.addData((long) i, new QuestValue(i, "text" + i, "desc" + i))
-            );
-            log.info("Load complete in " + (System.currentTimeMillis() - loadStart) + "ms");
+            if (preload > 0) {
+                long loadStart = System.currentTimeMillis();
+                log.info("Input range [0, " + preload + "]");
+
+                IgniteDataStreamer<Long, QuestValue> dataStreamer = ignite.dataStreamer(MY_CACHE);
+                dataStreamer.allowOverwrite(false); // default
+
+                IntStream.range(0, preload).forEach(
+                        i -> dataStreamer.addData((long) i, new QuestValue(i, "text" + i, "desc" + i))
+                );
+                log.info("Load complete in " + (System.currentTimeMillis() - loadStart) + "ms");
+
+            } else
+                log.debug("Preload phase skipped");
+        }
+
+        @PostConstruct /* Dumb Lucene fix */
+        public void reput() {
+            long startPoint = System.currentTimeMillis();
+            long records = 0;
+            ScanQuery<Long, QuestValue> fullScan = new ScanQuery<>((k,v) -> true);
+            IgniteCache<Object, Object> cache = ignite.cache(MY_CACHE);
+            try(QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(fullScan)) {
+                for (Cache.Entry<Long, QuestValue> entry : cursor) {
+                    cache.put(entry.getKey(), entry.getValue());
+                    records++;
+                    if (records % 1000 == 0)
+                        log.info(">> put {} records", records);
+                }
+            }
+            long duration = System.currentTimeMillis() - startPoint;
+            log.info("{} was rebuild in {}ms with {} entries", MY_CACHE, duration, records);
         }
     }
 
