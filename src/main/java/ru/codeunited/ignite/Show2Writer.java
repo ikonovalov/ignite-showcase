@@ -6,7 +6,6 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteAtomicSequence;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
-import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.configuration.AtomicConfiguration;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
@@ -19,14 +18,14 @@ import static org.apache.ignite.cache.CacheAtomicityMode.ATOMIC;
 import static org.apache.ignite.cache.CacheMode.PARTITIONED;
 
 @Slf4j
-public class Show2Writer {
+class Show2Writer {
 
-    public static final String PAYLOAD_CACHE = "payloadCache";
+    private static final String PAYLOAD_CACHE = "payloadCache";
 
     @AllArgsConstructor
     @NoArgsConstructor @Setter
     @Builder @EqualsAndHashCode
-    public static class Key {
+    static class Key {
         private long id;
         private UUID uuid;
         private short version;
@@ -35,13 +34,13 @@ public class Show2Writer {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Payload {
+    static class Payload {
         private String text;
     }
 
-    private IgniteConfiguration igniteConfiguration = new IgniteConfiguration();
+    private final IgniteConfiguration igniteConfiguration = new IgniteConfiguration();
 
-    private CacheConfiguration<Key, Payload> payloadCacheConfiguration = new CacheConfiguration<>();
+    private final CacheConfiguration<Key, Payload> payloadCacheConfiguration = new CacheConfiguration<>();
 
     private Show2Writer init() {
         payloadCacheConfiguration.setName(PAYLOAD_CACHE);
@@ -59,7 +58,7 @@ public class Show2Writer {
         return this;
     }
 
-    public Show2Writer run() {
+    private void run() {
         Ignite ignite = Ignition.start(igniteConfiguration);
         IgniteCache<Key, Payload> cache = ignite.cache(PAYLOAD_CACHE);
         UUID nodeUUID = ignite.cluster().localNode().id();
@@ -75,7 +74,6 @@ public class Show2Writer {
 
         ignite.compute().broadcast(new SequenceClosure("example-sequence"));
 
-        return this;
     }
 
     public static void main(String[] args) {

@@ -42,10 +42,10 @@ public class QuestController {
     @HystrixCommand(fallbackMethod = "reliable")
     public List<QuestValue> search(@RequestBody String queryText) {
         IgniteCache<Long, QuestValue> cache = cache();
-        long startMonent = System.currentTimeMillis();
+        long startMoment = System.currentTimeMillis();
         TextQuery<Long, QuestValue> txt = new TextQuery<>(QuestValue.class, queryText);
         try (QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(txt)) {
-            log.debug("Open cursor in {}ms", (System.currentTimeMillis() - startMonent));
+            log.debug("Open cursor in {}ms", (System.currentTimeMillis() - startMoment));
             return cursor.getAll().stream().map(Cache.Entry::getValue).collect(Collectors.toList());
         }
     }
@@ -69,6 +69,7 @@ public class QuestController {
         return Optional.ofNullable(cache.get(id)).orElseThrow(() -> new RuntimeException(id + " not found"));
     }
 
+    @SuppressWarnings("SameReturnValue")
     public String reliable() {
         return "Data grid not available";
     }

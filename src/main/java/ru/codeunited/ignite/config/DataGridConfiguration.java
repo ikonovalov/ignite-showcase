@@ -20,13 +20,11 @@ public class DataGridConfiguration {
             PersistentStoreConfiguration persistentStoreConfiguration
     ) {
 
-        IgniteConfiguration configuration =
-                new IgniteConfiguration()
-                        .setCacheConfiguration(
-                                cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()])
-                        )
-                        .setPersistentStoreConfiguration(persistentStoreConfiguration);
-        return configuration;
+        return new IgniteConfiguration()
+                .setCacheConfiguration(
+                        cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()])
+                )
+                .setPersistentStoreConfiguration(persistentStoreConfiguration);
     }
 
     @Bean
