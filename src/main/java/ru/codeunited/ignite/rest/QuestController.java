@@ -8,6 +8,7 @@ import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.ScanQuery;
 import org.apache.ignite.cache.query.TextQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.web.bind.annotation.*;
 import ru.codeunited.ignite.config.MyCacheConfiguration;
 import ru.codeunited.ignite.model.QuestValue;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static ru.codeunited.ignite.config.MyCacheConfiguration.MY_CACHE;
 
+@EnableCircuitBreaker
 @RestController
 @RequestMapping("/quest")
 @Slf4j
@@ -58,7 +60,10 @@ public class QuestController {
     }
 
     @GetMapping("/{id}")
-    @HystrixCommand(fallbackMethod = "reliable")
+    @HystrixCommand(
+            commandKey = "GetQuestCommand",
+            fallbackMethod = "reliable"
+    )
     public QuestValue get(@PathVariable("id") Long id) {
         IgniteCache<Long, QuestValue> cache = cache();
         return Optional.ofNullable(cache.get(id)).orElseThrow(() -> new RuntimeException(id + " not found"));

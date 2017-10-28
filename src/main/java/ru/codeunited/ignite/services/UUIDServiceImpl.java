@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by ikonovalov on 13/04/17.
  */
+@org.springframework.stereotype.Service
 public class UUIDServiceImpl implements UUIDService, Service {
 
     private final Logger log = LoggerFactory.getLogger(UUIDServiceImpl.class);
