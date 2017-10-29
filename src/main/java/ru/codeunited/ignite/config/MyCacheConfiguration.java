@@ -75,7 +75,7 @@ public class MyCacheConfiguration {
         }
 
         @PostConstruct /* Dumb Lucene fix */
-        public void reput() {
+        public void tryToReload() {
             long startPoint = System.currentTimeMillis();
             long records = 0;
             ScanQuery<Long, QuestValue> fullScan = new ScanQuery<>((k,v) -> true);

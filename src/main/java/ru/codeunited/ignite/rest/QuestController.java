@@ -4,8 +4,10 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
+import org.apache.ignite.cache.CacheMetrics;
 import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.ScanQuery;
+import org.apache.ignite.cache.query.SqlQuery;
 import org.apache.ignite.cache.query.TextQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
@@ -38,8 +40,12 @@ public class QuestController {
         return ignite.cache(MY_CACHE);
     }
 
+    @GetMapping("/metrics")
+    public CacheMetrics metrics() {
+        return cache().metrics();
+    }
+
     @PostMapping("/search")
-    @HystrixCommand(fallbackMethod = "reliable")
     public List<QuestValue> search(@RequestBody String queryText) {
         IgniteCache<Long, QuestValue> cache = cache();
         long startMoment = System.currentTimeMillis();
@@ -50,19 +56,32 @@ public class QuestController {
         }
     }
 
+    @PostMapping("/sql")
+    public List<QuestValue> sql(@RequestBody String sqlText) {
+        IgniteCache<Long, QuestValue> cache = cache();
+        SqlQuery<Long, QuestValue> quest = new SqlQuery<>(QuestValue.class, sqlText);
+        try(QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(quest)) {
+            return cursor.getAll().stream().map(Cache.Entry::getValue).collect(Collectors.toList());
+        }
+    }
+
     @PostMapping
-    @HystrixCommand(fallbackMethod = "reliable")
-    public Long put(@RequestBody QuestValue value) {
+    @HystrixCommand(fallbackMethod = "putFallback")
+    public boolean put(@RequestBody QuestValue value) {
         IgniteCache<Long, QuestValue> cache = cache();
         long id = value.getId();
-        cache.put(id, value);
-        return id;
+        boolean success = cache.putIfAbsent(id, value);
+        return success;
+    }
+
+    public boolean putFallback(QuestValue value) {
+        return Boolean.FALSE;
     }
 
     @GetMapping("/{id}")
     @HystrixCommand(
             commandKey = "GetQuestCommand",
-            fallbackMethod = "reliable"
+            fallbackMethod = "getFallback"
     )
     public QuestValue get(@PathVariable("id") Long id) {
         IgniteCache<Long, QuestValue> cache = cache();
@@ -70,8 +89,8 @@ public class QuestController {
     }
 
     @SuppressWarnings("SameReturnValue")
-    public String reliable() {
-        return "Data grid not available";
+    public QuestValue getFallback(Long id) {
+        return QuestValue.EMPTY;
     }
 
     @PostConstruct
