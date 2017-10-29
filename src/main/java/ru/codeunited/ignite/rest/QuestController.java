@@ -6,7 +6,6 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.cache.CacheMetrics;
 import org.apache.ignite.cache.query.QueryCursor;
-import org.apache.ignite.cache.query.ScanQuery;
 import org.apache.ignite.cache.query.SqlQuery;
 import org.apache.ignite.cache.query.TextQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.codeunited.ignite.config.MyCacheConfiguration;
 import ru.codeunited.ignite.model.QuestValue;
 
-import javax.annotation.PostConstruct;
 import javax.cache.Cache;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +30,7 @@ public class QuestController {
     private final Ignite ignite;
 
     @Autowired
-    public QuestController(Ignite ignite, MyCacheConfiguration.StreamLoader streamLoader) {
+    public QuestController(Ignite ignite, MyCacheConfiguration.CacheAutomation cacheAutomation) {
         this.ignite = ignite;
     }
 
@@ -70,8 +68,7 @@ public class QuestController {
     public boolean put(@RequestBody QuestValue value) {
         IgniteCache<Long, QuestValue> cache = cache();
         long id = value.getId();
-        boolean success = cache.putIfAbsent(id, value);
-        return success;
+        return cache.putIfAbsent(id, value);
     }
 
     public boolean putFallback(QuestValue value) {

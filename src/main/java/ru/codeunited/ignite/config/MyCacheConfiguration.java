@@ -44,7 +44,7 @@ public class MyCacheConfiguration {
     }
 
     @Component @Slf4j
-    public static class StreamLoader {
+    public static class CacheAutomation {
 
         private final Ignite ignite;
 
@@ -55,12 +55,12 @@ public class MyCacheConfiguration {
         private boolean rebuild;
 
         @Autowired
-        public StreamLoader(Ignite ignite) {
+        public CacheAutomation(Ignite ignite) {
             this.ignite = ignite;
         }
 
         @PostConstruct
-        public void load() {
+        public void preload() {
             if (preload > 0) {
                 long loadStart = System.currentTimeMillis();
                 log.info("{} Input range [0, {}]", MY_CACHE, preload);
