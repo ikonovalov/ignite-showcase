@@ -51,6 +51,9 @@ public class MyCacheConfiguration {
         @Value("${ignite.cache.my_cache.preload}")
         private int preload;
 
+        @Value("${ignite.cache.my_cache.rebuild}")
+        private boolean rebuild;
+
         @Autowired
         public StreamLoader(Ignite ignite) {
             this.ignite = ignite;
@@ -60,7 +63,7 @@ public class MyCacheConfiguration {
         public void load() {
             if (preload > 0) {
                 long loadStart = System.currentTimeMillis();
-                log.info("Input range [0, " + preload + "]");
+                log.info("{} Input range [0, {}]", MY_CACHE, preload);
 
                 IgniteDataStreamer<Long, QuestValue> dataStreamer = ignite.dataStreamer(MY_CACHE);
                 dataStreamer.allowOverwrite(false); // default
@@ -68,28 +71,33 @@ public class MyCacheConfiguration {
                 IntStream.range(0, preload).forEach(
                         i -> dataStreamer.addData((long) i, new QuestValue(i, "text" + i, "desc" + i))
                 );
-                log.info("Load complete in " + (System.currentTimeMillis() - loadStart) + "ms");
+                log.info("{} Load complete in {}ms", MY_CACHE, System.currentTimeMillis() - loadStart);
 
             } else
-                log.debug("Preload phase skipped");
+                log.debug("{} Preload phase skipped", MY_CACHE);
         }
 
         @PostConstruct /* Dumb Lucene fix */
-        public void tryToReload() {
-            long startPoint = System.currentTimeMillis();
-            long records = 0;
-            ScanQuery<Long, QuestValue> fullScan = new ScanQuery<>((k,v) -> true);
-            IgniteCache<Object, Object> cache = ignite.cache(MY_CACHE);
-            try(QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(fullScan)) {
-                for (Cache.Entry<Long, QuestValue> entry : cursor) {
-                    cache.put(entry.getKey(), entry.getValue());
-                    records++;
-                    if (records % 1000 == 0)
-                        log.info(">> put {} records", records);
+        public void rebuild() {
+            if (rebuild) {
+                log.info("{} Rebuild phase...", MY_CACHE);
+                long startPoint = System.currentTimeMillis();
+                long records = 0;
+                ScanQuery<Long, QuestValue> fullScan = new ScanQuery<>((k, v) -> true);
+                IgniteCache<Object, Object> cache = ignite.cache(MY_CACHE);
+                try (QueryCursor<Cache.Entry<Long, QuestValue>> cursor = cache.query(fullScan)) {
+                    for (Cache.Entry<Long, QuestValue> entry : cursor) {
+                        cache.put(entry.getKey(), entry.getValue());
+                        records++;
+                        if (records % 1000 == 0)
+                            log.info(">> put {} records", records);
+                    }
                 }
+                long duration = System.currentTimeMillis() - startPoint;
+                log.info("{} was rebuild in {}ms with {} entries", MY_CACHE, duration, records);
+            } else {
+                log.info("{} Rebuild phase skipped.", MY_CACHE);
             }
-            long duration = System.currentTimeMillis() - startPoint;
-            log.info("{} was rebuild in {}ms with {} entries", MY_CACHE, duration, records);
         }
     }
 
