@@ -15,6 +15,23 @@
         <version>1.5.8.RELEASE</version>
     </parent>
 
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <email>konovalov84@gmail.com</email>
+            <name>Igor Konovalov</name>
+            <url>https://github.com/ikonovalov</url>
+            <id>ikonovalov</id>
+        </developer>
+    </developers>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>

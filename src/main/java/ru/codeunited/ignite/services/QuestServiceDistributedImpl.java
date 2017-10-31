@@ -1,39 +1,35 @@
 package ru.codeunited.ignite.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.resources.IgniteInstanceResource;
-import org.apache.ignite.services.Service;
 import org.apache.ignite.services.ServiceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ru.codeunited.ignite.config.MyCacheConfiguration;
+import ru.codeunited.ignite.model.QuestValue;
 
 /**
  * Created by ikonovalov on 13/04/17.
  */
-@org.springframework.stereotype.Service
-public class UUIDServiceImpl implements UUIDService, Service {
-
-    private final Logger log = LoggerFactory.getLogger(UUIDServiceImpl.class);
+@Slf4j
+public class QuestServiceDistributedImpl implements QuestService, org.apache.ignite.services.Service {
 
     @IgniteInstanceResource
     private Ignite ignite;
 
-    private IgniteCache<String, String> cache;
+    private IgniteCache<Long, QuestValue> cache;
 
     private String svcName;
 
     @Override
     public void cancel(ServiceContext ctx) {
-
+        log.info("{} got cancel()", svcName);
     }
 
     @Override
     public void init(ServiceContext ctx) throws Exception {
-        cache = ignite.cache("zzCache");
-
+        cache = ignite.cache(MyCacheConfiguration.MY_CACHE);
         svcName = ctx.name();
-
         log.info("Service {} init() done.", svcName);
     }
 
@@ -43,7 +39,7 @@ public class UUIDServiceImpl implements UUIDService, Service {
     }
 
     @Override
-    public String toUID(String key) {
+    public QuestValue quest(Long key) {
         return cache.get(key);
     }
 }

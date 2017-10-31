@@ -72,7 +72,7 @@ public class MyCacheConfiguration {
                         i -> dataStreamer.addData((long) i, new QuestValue(i, "text" + i, "desc" + i))
                 );
                 log.info("{} Load complete in {}ms", MY_CACHE, System.currentTimeMillis() - loadStart);
-
+                dataStreamer.flush();
             } else
                 log.debug("{} Preload phase skipped", MY_CACHE);
         }
