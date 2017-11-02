@@ -64,7 +64,10 @@ public class QuestController {
     }
 
     @PostMapping
-    @HystrixCommand(fallbackMethod = "putFallback")
+    @HystrixCommand(
+            commandKey = "PutQuest",
+            fallbackMethod = "putFallback"
+    )
     public boolean put(@RequestBody QuestValue value) {
         IgniteCache<Long, QuestValue> cache = cache();
         long id = value.getId();
@@ -77,7 +80,7 @@ public class QuestController {
 
     @GetMapping("/{id}")
     @HystrixCommand(
-            commandKey = "GetQuestCommand",
+            commandKey = "GetQuest",
             fallbackMethod = "getFallback"
     )
     public QuestValue get(@PathVariable("id") Long id) {
