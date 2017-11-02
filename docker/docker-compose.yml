@@ -1,0 +1,9 @@
+version: '2.1'
+
+services:
+
+  ignite:
+    image: codeunited/ignite-showcase:1.0.0
+
+  zookeeper:
+    image: codeunited/zookeeper:3.4.10
