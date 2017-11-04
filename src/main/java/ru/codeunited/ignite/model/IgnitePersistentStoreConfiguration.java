@@ -10,4 +10,6 @@ public class IgnitePersistentStoreConfiguration {
     private String persistenceStorePath;
 
     private String walStorePath;
+
+    private String walArchivePath;
 }

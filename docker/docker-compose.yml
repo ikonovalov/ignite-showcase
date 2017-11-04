@@ -2,8 +2,47 @@ version: '2.1'
 
 services:
 
+  lb:
+    image: camptocamp/haproxy-consul:latest
+    container_name: 'load-balancer'
+    environment:
+      HAPROXY_DOMAIN: '127.0.0.1.xip.io:test'
+      SERVICE_80_IGNORE: 'yes'
+      SERVICE_8080_NAME: 'proxy-admin_infra'
+    ports:
+      - "80:80"
+      - "8080"
+    links:
+      - "consul"
+
+  # Only one for the whole cluster
+  consul:
+    command: -server -bootstrap
+    image: progrium/consul:latest
+    container_name: 'consul'
+    environment:
+      SERVICE_8500_NAME: 'consul-admin_infra'
+      SERVICE_53_IGNORE: 'yes'
+      SERVICE_8300_IGNORE: 'yes'
+      SERVICE_8301_IGNORE: 'yes'
+      SERVICE_8302_IGNORE: 'yes'
+      SERVICE_8400_IGNORE: 'yes'
+
+  # Exactly one per physical node
+  registrator:
+    command: "-internal consul://consul:8500"
+    image: gliderlabs/registrator:latest
+    container_name: 'registrator'
+    links:
+      - "consul"
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock"
+
   ignite:
     image: codeunited/ignite-showcase:1.0.0
-
-  zookeeper:
-    image: codeunited/zookeeper:3.4.10
+    environment:
+      SERVICE_NAME: 'data-grid'
+      SERVICE_11211_IGNORE: 'yes'
+      SERVICE_47100_IGNORE: 'yes'
+      SERVICE_47500_IGNORE: 'yes'
+      SERVICE_49112_IGNORE: 'yes'

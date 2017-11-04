@@ -1,7 +1,7 @@
 package ru.codeunited.ignite.rest;
 
 import org.apache.ignite.Ignite;
-import org.apache.ignite.configuration.PersistentStoreConfiguration;
+import org.apache.ignite.configuration.DataStorageConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,10 +21,11 @@ public class ConfigurationController {
 
     @GetMapping("/persistence")
     public IgnitePersistentStoreConfiguration persistentStoreConfiguration() {
-        PersistentStoreConfiguration cfg = ignite.configuration().getPersistentStoreConfiguration();
+        DataStorageConfiguration cfg = ignite.configuration().getDataStorageConfiguration();
         return IgnitePersistentStoreConfiguration.builder()
-                .persistenceStorePath(cfg.getPersistentStorePath())
-                .walStorePath(cfg.getWalStorePath())
+                .persistenceStorePath(cfg.getStoragePath())
+                .walStorePath(cfg.getWalPath())
+                .walArchivePath(cfg.getWalArchivePath())
                 .build();
     }
 }

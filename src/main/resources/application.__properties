@@ -1,4 +1,0 @@
-ignite.partition.count = 32
-ignite.cache.my_cache.preload = -1
-ignite.cache.my_cache.rebuild = false
-management.security.enabled = false

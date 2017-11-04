@@ -5,8 +5,6 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteServices;
 import org.apache.ignite.cluster.ClusterGroup;
 import org.apache.ignite.services.ServiceConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 //@Configuration
 @Slf4j
