@@ -6,7 +6,7 @@ services:
     image: camptocamp/haproxy-consul:latest
     container_name: 'load-balancer'
     environment:
-      HAPROXY_DOMAIN: '192.168.1.11.xip.io:test'
+      HAPROXY_DOMAIN: '127.0.0.1.xip.io:test'
       SERVICE_80_IGNORE: 'yes'
       SERVICE_8080_NAME: 'proxy-admin_infra'
     ports:
@@ -41,7 +41,7 @@ services:
   ignite:
     image: codeunited/ignite-showcase:1.0.0
     environment:
-      SERVICE_NAME: 'data-grid'
+      SERVICE_8080_NAME: 'data-grid'
       SERVICE_11211_IGNORE: 'yes'
       SERVICE_47100_IGNORE: 'yes'
       SERVICE_47500_IGNORE: 'yes'
