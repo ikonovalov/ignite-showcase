@@ -1,12 +1,11 @@
 ignite:
   partition:
-    count: 32
+    count: 256
   ds:
     base: /var/ignite/ds
     wal: ${ignite.ds.base}/wal
     wal-arch: ${ignite.ds.base}/wal-arch
     storage: ${ignite.ds.base}/storage
-
 
   cache:
     my_cache:

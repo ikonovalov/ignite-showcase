@@ -6,6 +6,7 @@ import org.apache.ignite.IgniteCache;
 import org.apache.ignite.IgniteDataStreamer;
 import org.apache.ignite.cache.CacheRebalanceMode;
 import org.apache.ignite.cache.CacheWriteSynchronizationMode;
+import org.apache.ignite.cache.affinity.AffinityFunction;
 import org.apache.ignite.cache.affinity.rendezvous.RendezvousAffinityFunction;
 import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.ScanQuery;
@@ -31,14 +32,14 @@ public class MyCacheConfiguration {
     public static final String MY_CACHE = "MY_CACHE";
 
     @Bean
-    public CacheConfiguration<Long, QuestValue> longQuestValueCacheConfiguration() {
+    public CacheConfiguration<Long, QuestValue> longQuestValueCacheConfiguration(AffinityFunction affinityFunction) {
         CacheConfiguration<Long, QuestValue> cacheConfiguration = new CacheConfiguration<>(MY_CACHE);
         cacheConfiguration.setAtomicityMode(ATOMIC);
         cacheConfiguration.setCacheMode(PARTITIONED);
         cacheConfiguration.setRebalanceMode(CacheRebalanceMode.ASYNC);
-        cacheConfiguration.setBackups(0);
+        cacheConfiguration.setBackups(2);
         cacheConfiguration.setWriteSynchronizationMode(CacheWriteSynchronizationMode.PRIMARY_SYNC);
-        cacheConfiguration.setAffinity(new RendezvousAffinityFunction(false, 64));
+        cacheConfiguration.setAffinity(affinityFunction);
         cacheConfiguration.setIndexedTypes(Long.class, QuestValue.class);
         return cacheConfiguration;
     }
