@@ -3,6 +3,9 @@ all: up
 up:
 	docker-compose up
 
-clean:
-	docker-compose down; docker volume prune --force
+down:
+	docker-compose down
+
+clean: down
+	docker volume prune --force
 

@@ -1,44 +1,51 @@
 version: '2.1'
 
 services:
-  zookeeper:
-    image: garland/zookeeper
+  exhibitor:
+    image: netflixoss/exhibitor:1.5.2
     ports:
       - "2181:2181"
       - "2888:2888"
       - "3888:3888"
 
   master:
-    image: garland/mesosphere-docker-mesos-master
+    image: mesosphere/mesos-master:1.4.0
     depends_on:
-      - zookeeper
+      - exhibitor
     environment:
-      - MESOS_ZK=zk://zookeeper:2181/mesos
+      - MESOS_ZK=zk://exhibitor:2181/mesos
       - MESOS_PORT=5050
       - MESOS_LOG_DIR=/var/log/mesos
       - MESOS_QUORUM=1
       - MESOS_REGISTRY=in_memory
       - MESOS_WORK_DIR=/var/lib/mesos
+      - MESOS_LOGGING_LEVEL=INFO
     ports:
       - "5050:5050"
 
   marathon:
-    image: garland/mesosphere-docker-marathon
+    image: mesosphere/marathon:v1.4.9
     depends_on:
-      - zookeeper
       - master
     ports:
       - "8080:8080"
-    command: --master zk://zookeeper:2181/mesos --zk zk://zookeeper:2181/marathon
+    command: --master zk://exhibitor:2181/mesos --zk zk://exhibitor:2181/marathon
 
   slave:
-    image: garland/mesosphere-docker-mesos-master:latest
+    image: mesosphere/mesos-slave:1.4.0
     depends_on:
-      - zookeeper
       - marathon
     entrypoint:
       - mesos-slave
+    privileged: true
+    volumes:
+      - "/usr/local/bin/docker:/usr/local/bin/docker:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
-      - MESOS_MASTER=zk://zookeeper:2181/mesos
+      - MESOS_MASTER=zk://exhibitor:2181/mesos
+      - MESOS_WORK_DIR=/var/tmp/mesos
       - MESOS_LOG_DIR=/var/log/mesos
       - MESOS_LOGGING_LEVEL=INFO
+      - MESOS_SYSTEMD_ENABLE_SUPPORT=false
+      - MESOS_CONTAINERIZERS=docker,mesos
+      - MESOS_ISOLATION=posix/cpu,posix/mem
