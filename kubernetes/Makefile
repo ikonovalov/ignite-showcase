@@ -9,7 +9,7 @@ minikube:
 build:
 	cd .. && mvn clean package && cd - && \
     cp ../target/showcase-${APP_VERSION}.jar ./ignite/showcase.jar && \
-    eval $(docker-machine env) && \
+    eval $(minikube docker-env) && \
     docker build -t "codeunited/ignite-showcase:${APP_VERSION}" ../docker/ignite/ && \
     rm ./ignite/showcase.jar
 
