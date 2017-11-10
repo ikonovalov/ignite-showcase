@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 @Configuration
@@ -19,10 +21,11 @@ public class DataGridConfiguration {
     @Bean
     public IgniteConfiguration igniteConfiguration(
             List<CacheConfiguration> cacheConfigurations,
-            DataStorageConfiguration dataStorageConfiguration) {
+            DataStorageConfiguration dataStorageConfiguration) throws UnknownHostException {
 
         CacheConfiguration[] cacheCfg = cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()]);
         return new IgniteConfiguration()
+                .setIgniteInstanceName(InetAddress.getLocalHost().getHostName() + "-grid-instance")
                 .setCacheConfiguration(cacheCfg)
                 .setDataStorageConfiguration(dataStorageConfiguration);
     }
