@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 @Configuration
@@ -21,11 +23,12 @@ public class DataGridConfiguration {
     @Bean
     public IgniteConfiguration igniteConfiguration(
             List<CacheConfiguration> cacheConfigurations,
-            DataStorageConfiguration dataStorageConfiguration) {
+            DataStorageConfiguration dataStorageConfiguration) throws UnknownHostException {
 
         CacheConfiguration[] cacheCfg = cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()]);
         IgniteConfiguration configuration = new IgniteConfiguration()
                 .setCacheConfiguration(cacheCfg)
+                .setIgniteInstanceName(InetAddress.getLocalHost().getHostName() + "-grid-instance")
                 .setDataStorageConfiguration(dataStorageConfiguration);
 
         if (Boolean.valueOf(System.getenv("KUBERNETES_DISCOVERY"))) {
