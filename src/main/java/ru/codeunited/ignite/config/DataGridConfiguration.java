@@ -31,7 +31,7 @@ public class DataGridConfiguration {
                 .setIgniteInstanceName(InetAddress.getLocalHost().getHostName() + "-grid-instance")
                 .setDataStorageConfiguration(dataStorageConfiguration);
 
-        if (Boolean.valueOf(System.getenv("KUBERNETES_DISCOVERY"))) {
+        if (System.getenv("KUBERNETES_SERVICE_HOST") != null) {
             log.info("Setup kubernetes discovery");
             configuration.setDiscoverySpi(new TcpDiscoverySpi().setIpFinder(new TcpDiscoveryKubernetesIpFinder()));
         }
