@@ -31,13 +31,11 @@ spec:
     spec:
       containers:
       - name: ignite-showcase
-        image: codeunited/ignite-showcase:1.0.0
-        env:
-        - name: KUBERNETES_DISCOVERY
-          value: true
+        imagePullPolicy: Never
+        image: codeunited/ignite-showcase:latest
         ports:
-        - containerPort: 8080
-        - containerPort: 11211
-        - containerPort: 47100
-        - containerPort: 47500
-        - containerPort: 49112
+          - containerPort: 8080
+          - containerPort: 11211
+          - containerPort: 47100
+          - containerPort: 47500
+          - containerPort: 49112
