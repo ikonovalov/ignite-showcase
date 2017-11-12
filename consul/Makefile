@@ -4,9 +4,9 @@ all: build up
 
 build:
 	cd .. && mvn clean package && cd - && \
-	cp ../target/showcase-${APP_VERSION}.jar ./ignite/showcase.jar && \
-	docker build -t "codeunited/ignite-showcase:${APP_VERSION}" ./ignite/ && \
-	rm ./ignite/showcase.jar
+	cp ../target/showcase-${APP_VERSION}.jar ../docker/showcase.jar && \
+	docker build -t "codeunited/ignite-showcase:${APP_VERSION}" ../docker/ && \
+	rm ../docker/showcase.jar
 up:
 	docker-compose up
 down:
