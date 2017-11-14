@@ -41,7 +41,7 @@ services:
   ignite:
     image: codeunited/ignite-showcase:1.0.0
     environment:
-      SERVICE_8080_NAME: 'data-grid'
+      SERVICE_28080_NAME: 'data-grid'
       SERVICE_11211_IGNORE: 'yes'
       SERVICE_47100_IGNORE: 'yes'
       SERVICE_47500_IGNORE: 'yes'

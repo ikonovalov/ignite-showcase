@@ -15,3 +15,6 @@ ignite:
 management:
   security:
     enabled: false
+
+server:
+  port: ${http_port:28080}
