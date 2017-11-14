@@ -18,6 +18,6 @@ clean: down
 	docker volume prune --force
 
 deploy:
-	curl -XPUT http://localhost:8080/v2/apps/data-grid --upload-file marathon-data-grid.json
+	curl -XPUT http://localhost:8081/v2/apps/data-grid --upload-file marathon-data-grid.json
 
 

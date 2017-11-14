@@ -35,7 +35,8 @@ make deploy
 
 ### Mesos
 * Mesos dashboard [http://localhost:5050/#/](http://localhost:5050/#/)
-* Marathon dashboard [http://localhost:8080/#/](http://localhost:8080/)
+* Marathon dashboard [http://localhost:8081/#/](http://localhost:8081/)
+* Exhibitor dashboard [http://localhost:8080/exhibitor/v1/ui/index.html](http://localhost:8080/exhibitor/v1/ui/index.html)
 
 ### Kubernetes
 TODO

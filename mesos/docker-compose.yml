@@ -3,68 +3,27 @@ version: '2.1'
 services:
   exhibitor:
     image: netflixoss/exhibitor:1.5.2
-    ports:
-      - "2181:2181"
-      - "2888:2888"
-      - "3888:3888"
+    network_mode: "host"
 
   master:
     image: mesosphere/mesos-master:1.4.0
     depends_on:
       - exhibitor
     environment:
-      - MESOS_ZK=zk://exhibitor:2181/mesos
+      - MESOS_ZK=zk://localhost:2181/mesos
       - MESOS_PORT=5050
       - MESOS_LOG_DIR=/var/log/mesos
       - MESOS_QUORUM=1
       - MESOS_REGISTRY=in_memory
       - MESOS_WORK_DIR=/var/lib/mesos
       - MESOS_LOGGING_LEVEL=INFO
-    ports:
-      - "5050:5050"
-
-  marathon:
-    image: mesosphere/marathon:v1.4.9
-    depends_on:
-      - exhibitor
-      - master
-    ports:
-      - "8080:8080"
-    command: --master zk://exhibitor:2181/mesos --zk zk://exhibitor:2181/marathon
-
-  marathon-lb:
-    image: mesosphere/marathon-lb:v1.8.1
-    depends_on:
-      - marathon
-    environment:
-      - PORTS=80,443,9090,9091
-    ports:
-      - "80:80"
-      - "443:443"
-      - "9090:9090"
-      - "9091:9091"
-    command: sse --marathon http://marathon:8080 --group external --strict-mode --health-check
-
-  slave-dind:
-    image: mesosphere/mesos-slave-dind:0.3.0_mesos-1.0.1_docker-1.10.3_ubuntu-14.04.5
-    depends_on:
-      - marathon
-    privileged: true
-    environment:
-      - MESOS_MASTER=zk://exhibitor:2181/mesos
-      - MESOS_WORK_DIR=/var/tmp/mesos
-      - MESOS_LOG_DIR=/var/log/mesos
-      - MESOS_LOGGING_LEVEL=INFO
-      - MESOS_SYSTEMD_ENABLE_SUPPORT=false
-      - MESOS_CONTAINERIZERS=docker,mesos
-      - MESOS_ISOLATION=posix/cpu,posix/mem
-      - DOCKER_NETWORK_OFFSET=0.0.33.0
+    network_mode: "host"
 
   slave:
     image: mesosphere/mesos-slave:1.4.0
     depends_on:
       - exhibitor
-      - marathon
+    network_mode: "host"
     entrypoint:
       - mesos-slave
     privileged: true
@@ -72,10 +31,27 @@ services:
       - "/usr/local/bin/docker:/usr/local/bin/docker:ro"
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
-      - MESOS_MASTER=zk://exhibitor:2181/mesos
+      - MESOS_MASTER=zk://localhost:2181/mesos
       - MESOS_WORK_DIR=/var/tmp/mesos
       - MESOS_LOG_DIR=/var/log/mesos
       - MESOS_LOGGING_LEVEL=INFO
       - MESOS_SYSTEMD_ENABLE_SUPPORT=false
       - MESOS_CONTAINERIZERS=docker,mesos
       - MESOS_ISOLATION=posix/cpu,posix/mem
+
+  marathon:
+    image: mesosphere/marathon:v1.5.2
+    depends_on:
+      - exhibitor
+      - master
+    network_mode: "host"
+    command: --master zk://localhost:2181/mesos --zk zk://localhost:2181/marathon --http_port 8081
+
+#  marathon-lb:
+#    image: mesosphere/marathon-lb:v1.8.1
+#    depends_on:
+#      - marathon
+#    environment:
+#      - PORTS=80,443,9090,9091
+#    network_mode: "host"
+#    command: sse --marathon http://localhost:8080 --group external --strict-mode --health-check
