@@ -19,5 +19,11 @@ clean: down
 
 deploy:
 	curl -XPUT http://localhost:8081/v2/apps/data-grid --upload-file marathon-data-grid.json
+undeploy:
+	curl -XDELETE http://localhost:8081/v2/apps/data-grid
+restart:
+	curl -XPOST http://localhost:8081/v2/apps/data-grid/restart
+show:
+	curl -XGET http://localhost:8081/v2/apps/data-grid
 
 

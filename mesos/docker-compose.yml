@@ -47,11 +47,11 @@ services:
     network_mode: "host"
     command: --master zk://localhost:2181/mesos --zk zk://localhost:2181/marathon --http_port 8081
 
-#  marathon-lb:
-#    image: mesosphere/marathon-lb:v1.8.1
-#    depends_on:
-#      - marathon
-#    environment:
-#      - PORTS=80,443,9090,9091
-#    network_mode: "host"
-#    command: sse --marathon http://localhost:8080 --group external --strict-mode --health-check
+  marathon-lb:
+    image: mesosphere/marathon-lb:v1.8.1
+    depends_on:
+      - marathon
+    environment:
+      - PORTS=80,443,9090,9091
+    network_mode: "host"
+    command: sse --marathon http://localhost:8081 --group external --health-check

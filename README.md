@@ -10,17 +10,17 @@ Start
 make up
 ```
 
-Stop
+Shutdown
 ```bash
 make down
 ```
 
-_Deploy grid instance (optional)_
+_Deploy grid instance (Marathon option)_
 ```bash
 make deploy
 ```
 
-### Consul showcase links
+## Consul
 
 #### Hystrix
  * Dashboard http://data-grid.127.0.0.1.xip.io/hystrix
@@ -33,10 +33,20 @@ make deploy
 * Consul dashboard [http://consul-admin.infra.127.0.0.1.xip.io](http://consul-admin.infra.127.0.0.1.xip.io)
 * HAProxy dashboard [http://proxy-admin.infra.127.0.0.1.xip.io](http://consul-admin.infra.127.0.0.1.xip.io)
 
-### Mesos
+
+
+## Mesosphere
+* Exhibitor/ZK UI [http://localhost:8080/exhibitor/v1/ui/index.html](http://localhost:8080/exhibitor/v1/ui/index.html)
 * Mesos dashboard [http://localhost:5050/#/](http://localhost:5050/#/)
 * Marathon dashboard [http://localhost:8081/#/](http://localhost:8081/)
-* Exhibitor dashboard [http://localhost:8080/exhibitor/v1/ui/index.html](http://localhost:8080/exhibitor/v1/ui/index.html)
+* Marathon-LB (HAProxy on steroids)
+    * [http://localhost:9090/haproxy?stats](http://localhost:9090/haproxy?stats) 
+    * [http://localhost:9090/_haproxy_getconfig](http://localhost:9090/_haproxy_getconfig) 
 
-### Kubernetes
+Warm up load-balancer 
+```bash 
+ab -n200 -c60 http://dg.127.0.0.1.xip.io/quest/1
+```
+
+## Kubernetes
 TODO

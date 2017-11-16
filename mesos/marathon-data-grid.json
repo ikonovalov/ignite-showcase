@@ -1,11 +1,13 @@
 {
-  "id": "/data-grid",
+  "id": "/apache-ignite/data-grid",
   "cmd": null,
   "cpus": 2,
-  "mem": 2048,
+  "mem": 1024,
   "disk": 200,
   "instances": 1,
-  "acceptedResourceRoles": [],
+  "acceptedResourceRoles": [
+    "*"
+  ],
   "container": {
     "type": "DOCKER",
     "docker": {
@@ -32,6 +34,10 @@
       "delaySeconds": 15
     }
   ],
+  "labels": {
+    "HAPROXY_GROUP": "external",
+    "HAPROXY_0_VHOST": "dg.127.0.0.1.xip.io"
+  },
   "portDefinitions": [
     {
       "port": 10000,
