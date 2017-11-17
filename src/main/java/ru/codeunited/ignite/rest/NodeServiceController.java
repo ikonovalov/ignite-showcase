@@ -28,14 +28,14 @@ public class NodeServiceController {
     }
 
     @GetMapping("/execution-id")
-    public UUID nodeServiceExecutionId() {
+    public UUID executionId() {
         IgniteServices services = ignite.services();
         NodeService nodeService = services.serviceProxy("node-service", NodeService.class, false);
         return nodeService.getExecutionId();
     }
 
     @GetMapping("/services")
-    public List<String> totalNodeServices() {
+    public List<String> services() {
         Collection<ServiceDescriptor> serviceDescriptors = ignite.services().serviceDescriptors();
         return serviceDescriptors
                 .stream()
