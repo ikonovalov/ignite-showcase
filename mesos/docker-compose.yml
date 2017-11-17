@@ -41,6 +41,7 @@ services:
 
   marathon:
     image: mesosphere/marathon:v1.5.2
+    restart: on-failure
     depends_on:
       - exhibitor
       - master

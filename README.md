@@ -37,11 +37,11 @@ make deploy
 
 ## Mesosphere
 * Exhibitor/ZK UI [http://localhost:8080/exhibitor/v1/ui/index.html](http://localhost:8080/exhibitor/v1/ui/index.html)
-* Mesos dashboard [http://localhost:5050/#/](http://localhost:5050/#/)
-* Marathon dashboard [http://localhost:8081/#/](http://localhost:8081/)
+* Mesos dashboard [http://mesos.127.0.0.1.xip.io:5050/#/](http://mesos.127.0.0.1.xip.io:5050/#/)
+* Marathon dashboard [marathon.127.0.0.1.xip.io:8081/#/](marathon.127.0.0.1.xip.io:8081)
 * Marathon-LB (HAProxy on steroids)
-    * [http://localhost:9090/haproxy?stats](http://localhost:9090/haproxy?stats) 
-    * [http://localhost:9090/_haproxy_getconfig](http://localhost:9090/_haproxy_getconfig) 
+    * [http://ha.127.0.0.1.xip.io:9090/haproxy?stats](http://ha.127.0.0.1.xip.io:9090/haproxy?stats) 
+    * [http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig](http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig) 
 
 Warm up load-balancer 
 ```bash 

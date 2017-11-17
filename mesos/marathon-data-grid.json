@@ -1,7 +1,7 @@
 {
   "id": "/apache-ignite/data-grid",
   "cmd": null,
-  "cpus": 2,
+  "cpus": 1,
   "mem": 1024,
   "disk": 200,
   "instances": 1,

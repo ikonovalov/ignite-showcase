@@ -17,10 +17,11 @@ down:
 clean: down
 	docker volume prune --force
 
-################################################
-#Application tasks
+########################################################################################################################
+## Application tasks ###################################################################################################
 
-MARATHON_DG_URL=http://localhost:8081/v2/apps/data-grid
+MARATHON_URL=http://localhost:8081/v2/apps
+MARATHON_DG_URL=${MARATHON_URL}/data-grid
 
 deploy:
 	curl -XPUT ${MARATHON_DG_URL} --upload-file marathon-data-grid.json
@@ -30,5 +31,4 @@ restart:
 	curl -XPOST ${MARATHON_DG_URL}/restart
 show:
 	curl -XGET ${MARATHON_DG_URL}
-
 
