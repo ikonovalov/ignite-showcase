@@ -8,6 +8,9 @@ import ru.codeunited.ignite.services.ClusterGroupSelectorStrategy;
 
 import java.util.function.Supplier;
 
+/**
+ * Select servers nodes only.
+ */
 @Component
 public class ServersOnlyClusterGroupSelector implements ClusterGroupSelectorStrategy, Supplier<ClusterGroup> {
 
