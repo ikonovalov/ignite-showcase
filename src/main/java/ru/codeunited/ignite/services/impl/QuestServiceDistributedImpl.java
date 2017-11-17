@@ -1,18 +1,20 @@
-package ru.codeunited.ignite.services;
+package ru.codeunited.ignite.services.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.resources.IgniteInstanceResource;
+import org.apache.ignite.services.Service;
 import org.apache.ignite.services.ServiceContext;
 import ru.codeunited.ignite.config.MyCacheConfiguration;
 import ru.codeunited.ignite.model.QuestValue;
+import ru.codeunited.ignite.services.QuestService;
 
 /**
  * Created by ikonovalov on 13/04/17.
  */
 @Slf4j
-public class QuestServiceDistributedImpl implements QuestService, org.apache.ignite.services.Service {
+public class QuestServiceDistributedImpl implements QuestService, Service {
 
     @IgniteInstanceResource
     private Ignite ignite;
