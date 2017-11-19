@@ -9,16 +9,55 @@
         </layout>
     </appender>
 
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5045</destination>
+        <ssl>
+            <trustStore>
+                <location>classpath:dg-truststore.jks</location>
+                <password>cdsazx</password>
+            </trustStore>
+        </ssl>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <mdc/> <!-- MDC variables on the Thread will be written as JSON fields-->
+                <context/> <!--Outputs entries from logback's context -->
+                <version/> <!-- Logstash json format version, the @version field in the output-->
+                <logLevel/>
+                <loggerName/>
+
+                <pattern>
+                    <pattern> <!-- we can add some custom fields to be sent with all the log entries. -->
+                        {      <!--make filtering easier in Logstash-->
+                            "appName": "elk-testdata",<!--or searching with Kibana-->
+                            "appVersion": "1.0"
+                        }
+                    </pattern>
+                </pattern>
+
+                <threadName/>
+                <message/>
+
+                <logstashMarkers/> <!-- Useful so we can add extra information for specific log lines as Markers-->
+                <arguments/> <!--or through StructuredArguments-->
+
+                <stackTrace/>
+            </providers>
+        </encoder>
+    </appender>
+
     <logger name="org.springframework" level="info" additivity="false">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
     </logger>
 
     <logger name="ru.codeunited.ignite" level="debug" additivity="false">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
     </logger>
 
     <root level="error">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
     </root>
 
 </configuration>
