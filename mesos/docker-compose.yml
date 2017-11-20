@@ -1,14 +1,14 @@
 version: '2.1'
 
 services:
-  exhibitor:
-    image: netflixoss/exhibitor:1.5.2
+  zookeeper:
+    image: zookeeper:3.5.3-beta
     network_mode: "host"
 
   master:
     image: mesosphere/mesos-master:1.4.0
     depends_on:
-      - exhibitor
+      - zookeeper
     environment:
       - MESOS_ZK=zk://localhost:2181/mesos
       - MESOS_PORT=5050
@@ -22,7 +22,7 @@ services:
   slave:
     image: mesosphere/mesos-slave:1.4.0
     depends_on:
-      - exhibitor
+      - zookeeper
     network_mode: "host"
     entrypoint:
       - mesos-slave
@@ -43,7 +43,7 @@ services:
     image: mesosphere/marathon:v1.5.2
     restart: on-failure
     depends_on:
-      - exhibitor
+      - zookeeper
       - master
     network_mode: "host"
     command: --master zk://localhost:2181/mesos --zk zk://localhost:2181/marathon --http_port 8081
