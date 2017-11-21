@@ -1,0 +1,95 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ignite-config
+data:
+  example-kube.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:util="http://www.springframework.org/schema/util"
+           xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/util
+            http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="ignite.cfg"
+        class="org.apache.ignite.configuration.IgniteConfiguration">
+
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                    <property name="ipFinder">
+                        <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder"></bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    </beans>
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # Name of Ignite Service used by Kubernetes IP finder.
+  # The name must be equal to TcpDiscoveryKubernetesIpFinder.serviceName.
+  name: ignite
+spec:
+  type:	NodePort
+  ports:
+    - port: 9042
+      nodePort: 30300
+  selector:
+    app: ignite
+
+
+---
+# An example of a Kubernetes configuration for Ignite pods deployment.
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  # Custom Ignite cluster's name.
+  name: ignite-cluster
+spec:
+  # A number of Ignite pods to be started by Kubernetes initially.
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        # This label has to be added to the selector's section of
+        # ignite-service.yaml so that the Kubernetes Ignite lookup service
+        # can easily track all Ignite pods available deployed so far.
+        app: ignite
+    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: ignite-config
+
+      containers:
+        # Custom Ignite pod name.
+      - name: ignite-node
+        # Ignite Docker image. Kubernetes IP finder is supported starting from
+        # Apache Ignite 1.9.0
+        image: apacheignite/ignite:2.3.0
+        env:
+        # Ignite's Docker image parameter. Adding the jar file that
+        # contain TcpDiscoveryKubernetesIpFinder implementation.
+        - name: OPTION_LIBS
+          value: ignite-kubernetes
+        # Ignite's Docker image parameter. Passing the Ignite configuration
+        # to use for an Ignite pod.
+        - name: CONFIG_URI
+          value: file:////data/ignite/example-kube.xml
+        ports:
+        # Ports to open.
+        # Might be optional depending on your Kubernetes environment.
+        - containerPort: 11211 # REST port number.
+        - containerPort: 47100 # communication SPI port number.
+        - containerPort: 47500 # discovery SPI port number.
+        - containerPort: 49112 # JMX port number.
+        volumeMounts:
+        - name: config-volume
+          mountPath: /data/ignite/
