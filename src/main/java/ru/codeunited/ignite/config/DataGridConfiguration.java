@@ -20,7 +20,7 @@ import java.util.UUID;
 @Slf4j
 public class DataGridConfiguration {
 
-    private static String INSTANCE_NAME;
+    static String INSTANCE_NAME;
     static {
         try {
             INSTANCE_NAME = InetAddress.getLocalHost().getHostName() + "-grid-instance";
