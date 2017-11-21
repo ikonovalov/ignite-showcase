@@ -19,7 +19,8 @@
     "volumes": []
   },
   "env": {
-    "HTTP_PORT": "${PORT0}"
+    "HTTP_PORT": "${PORT0}",
+    "info.starter": "marathon"
   },
   "healthChecks": [
     {

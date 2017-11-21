@@ -28,7 +28,7 @@ import static org.apache.ignite.cache.CacheMode.PARTITIONED;
 @Configuration
 public class MyCacheConfiguration {
 
-    public static final String MY_CACHE = "MY_CACHE";
+    public static final String MY_CACHE = "MyCache";
 
     @Bean
     public CacheConfiguration<Long, QuestValue> longQuestValueCacheConfiguration(AffinityFunction affinityFunction) {
