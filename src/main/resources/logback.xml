@@ -25,6 +25,11 @@
         <appender-ref ref="STASH"/>
     </logger>
 
+    <logger name="data-grid" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
+    </logger>
+
     <root level="ERROR">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="STASH"/>

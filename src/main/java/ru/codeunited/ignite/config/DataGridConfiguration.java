@@ -1,7 +1,6 @@
 package ru.codeunited.ignite.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteLogger;
 import org.apache.ignite.cache.affinity.AffinityFunction;
 import org.apache.ignite.cache.affinity.rendezvous.RendezvousAffinityFunction;
@@ -13,6 +12,7 @@ import org.apache.ignite.spi.discovery.DiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -40,10 +40,6 @@ public class DataGridConfiguration {
         MDC.put("dg-instance", INSTANCE_NAME);
     }
 
-    @Bean
-    public IgniteLogger gridLogger() {
-        return new Slf4jLogger();
-    }
 
     @Bean
     public IgniteConfiguration igniteConfiguration(
@@ -84,6 +80,11 @@ public class DataGridConfiguration {
                 .setWalArchivePath(walArchPath)
                 .setWalPath(walPath)
                 .setStoragePath(storagePath);
+    }
+
+    @Bean
+    public IgniteLogger gridLogger() {
+        return new Slf4jLogger(LoggerFactory.getLogger("data-grid"));
     }
 
     @Bean
