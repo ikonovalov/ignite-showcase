@@ -65,16 +65,17 @@ public class MyCacheConfiguration {
                 long loadStart = System.currentTimeMillis();
                 log.info("{} Input range [0, {}]", MY_CACHE, preload);
 
-                IgniteDataStreamer<Long, QuestValue> dataStreamer = ignite.dataStreamer(MY_CACHE);
-                dataStreamer.allowOverwrite(false); // default
+                try(IgniteDataStreamer<Long, QuestValue> dataStreamer = ignite.dataStreamer(MY_CACHE)) {
+                    dataStreamer.allowOverwrite(false); // default is false
 
-                IntStream.range(0, preload).forEach(
-                        i -> dataStreamer.addData((long) i, new QuestValue(i, "text" + i, "desc" + i))
-                );
-                log.info("{} Load complete in {}ms", MY_CACHE, System.currentTimeMillis() - loadStart);
-                dataStreamer.flush();
+                    IntStream.range(0, preload).forEach(
+                            i -> dataStreamer.addData((long) i, new QuestValue(i, "text" + i, "desc" + i))
+                    );
+                    log.info("{} Load complete in {}ms", MY_CACHE, System.currentTimeMillis() - loadStart);
+                    dataStreamer.flush();
+                }
             } else
-                log.debug("{} Preload phase skipped", MY_CACHE);
+                log.info("{} Preload phase skipped", MY_CACHE);
         }
 
         @PostConstruct /* Dumb Lucene fix */
