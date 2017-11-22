@@ -8,6 +8,7 @@ import org.apache.ignite.configuration.DataStorageConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +16,21 @@ import org.springframework.context.annotation.Configuration;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.UUID;
 
 @Configuration
 @Slf4j
 public class DataGridConfiguration {
+
+    static String INSTANCE_NAME;
+    static {
+        try {
+            INSTANCE_NAME = InetAddress.getLocalHost().getHostName() + "-grid-instance";
+        } catch (UnknownHostException e) {
+            INSTANCE_NAME = UUID.randomUUID() + "-grid-instance";
+        }
+        MDC.put("dg-instance", INSTANCE_NAME);
+    }
 
     @Bean
     public IgniteConfiguration igniteConfiguration(
@@ -27,8 +39,8 @@ public class DataGridConfiguration {
 
         CacheConfiguration[] cacheCfg = cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()]);
         IgniteConfiguration configuration = new IgniteConfiguration()
-                .setCacheConfiguration(cacheCfg)
                 .setIgniteInstanceName(InetAddress.getLocalHost().getHostName() + "-grid-instance")
+                .setCacheConfiguration(cacheCfg)
                 .setDataStorageConfiguration(dataStorageConfiguration);
 
         if (System.getenv("KUBERNETES_SERVICE_HOST") != null) {

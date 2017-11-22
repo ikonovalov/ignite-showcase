@@ -41,7 +41,8 @@ make deploy
 * Marathon dashboard [marathon.127.0.0.1.xip.io:8081/#/](marathon.127.0.0.1.xip.io:8081)
 * Marathon-LB (HAProxy on steroids)
     * [http://ha.127.0.0.1.xip.io:9090/haproxy?stats](http://ha.127.0.0.1.xip.io:9090/haproxy?stats) 
-    * [http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig](http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig) 
+    * [http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig](http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig)
+* Kibana [http://kb.127.0.0.1.xip.io:5601](http://kb.127.0.0.1.xip.io:5601) 
 
 Warm up load-balancer 
 ```bash 

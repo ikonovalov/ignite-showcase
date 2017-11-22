@@ -4,21 +4,30 @@
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{32} %msg%n
+                %d{HH:mm:ss.SSS} [%thread] %-5level %msg :: %logger%n
             </Pattern>
         </layout>
     </appender>
 
-    <logger name="org.springframework" level="info" additivity="false">
-        <appender-ref ref="STDOUT" />
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5000</destination>
+        <keepAliveDuration>5 minutes</keepAliveDuration>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+
+    <logger name="org.springframework" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
     </logger>
 
-    <logger name="ru.codeunited.ignite" level="debug" additivity="false">
-        <appender-ref ref="STDOUT" />
+    <logger name="ru.codeunited.ignite" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
     </logger>
 
-    <root level="error">
-        <appender-ref ref="STDOUT" />
+    <root level="WARN">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
     </root>
 
 </configuration>
