@@ -12,6 +12,7 @@ import org.apache.ignite.spi.discovery.DiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +55,7 @@ public class DataGridConfiguration {
                 .setCacheConfiguration(cacheCfg)
                 .setGridLogger(logger)
                 .setDiscoverySpi(discoverySpi)
+                .setMetricsLogFrequency(60000 * 10)
                 .setDataStorageConfiguration(dataStorageConfiguration);
     }
 
@@ -84,7 +86,9 @@ public class DataGridConfiguration {
 
     @Bean
     public IgniteLogger gridLogger() {
-        return new Slf4jLogger(LoggerFactory.getLogger("data-grid"));
+        Logger logger = LoggerFactory.getLogger("org.apache.ignite");
+        Slf4jLogger slf4jLogger = new Slf4jLogger(logger);
+        return slf4jLogger;
     }
 
     @Bean

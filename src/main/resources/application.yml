@@ -1,7 +1,3 @@
-spring:
-  application:
-    name: "Codeunited :: Apache Ignite :: Showcase"
-
 ignite:
   partition:
     count: 256

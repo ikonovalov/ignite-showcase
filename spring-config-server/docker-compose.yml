@@ -1,0 +1,11 @@
+version: '2.1'
+
+services:
+
+  config-server:
+    image: hyness/spring-cloud-config-server:1.4.0.RELEASE
+    ports:
+      - "8888:8888"
+    volumes:
+      - "./config:/config"
+

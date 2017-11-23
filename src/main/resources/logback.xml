@@ -25,7 +25,7 @@
         <appender-ref ref="STASH"/>
     </logger>
 
-    <logger name="data-grid" level="WARN" additivity="false">
+    <logger name="org.apache.ignite" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="STASH"/>
     </logger>
