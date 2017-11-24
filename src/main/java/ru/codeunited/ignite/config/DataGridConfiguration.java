@@ -56,7 +56,12 @@ public class DataGridConfiguration {
                 .setGridLogger(logger)
                 .setDiscoverySpi(discoverySpi)
                 .setMetricsLogFrequency(60000 * 10)
-                .setDataStorageConfiguration(dataStorageConfiguration);
+                .setDataStorageConfiguration(dataStorageConfiguration)
+                .setUserAttributes(
+                        IgniteNodeAttributes.newInstance()
+                                .attr("node_type", "storage-service")
+                                .toMap()
+                );
     }
 
     @Bean
