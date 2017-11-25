@@ -1,5 +1,5 @@
 
-#### How to build
+#### General: How to build and use `make`
 
 Build docker image with  application
 ```bash
@@ -15,9 +15,14 @@ Shutdown
 make down
 ```
 
-_Deploy grid instance (Marathon option)_
+_Deploy grid instance (Marathon app for instance)_
 ```bash
 make deploy
+```
+
+Cleanup 
+```bash
+make clean
 ```
 
 ## Consul
@@ -32,7 +37,6 @@ make deploy
 #### Consul & HAProxy
 * Consul dashboard [http://consul-admin.infra.127.0.0.1.xip.io](http://consul-admin.infra.127.0.0.1.xip.io)
 * HAProxy dashboard [http://proxy-admin.infra.127.0.0.1.xip.io](http://consul-admin.infra.127.0.0.1.xip.io)
-
 
 
 ## Mesosphere
@@ -51,3 +55,11 @@ ab -n200 -c60 http://dg.127.0.0.1.xip.io/quest/1
 
 ## Kubernetes
 TODO
+
+## Nomand
+TODO
+
+## Heroku (create/deploy/up)
+```bash
+heroku create && git push heroku master && heroku ps:scale web=1 && curl https://pure-plateau-77452.herokuapp.com/health | jq
+```
