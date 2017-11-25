@@ -5,12 +5,12 @@ Build docker image with  application
 ```bash
 make build
 ```
-Start
+Start (docker-compose in general or something. It depends.)
 ```bash
 make up
 ```
 
-Shutdown
+Shutdown ( ... this stuff)
 ```bash
 make down
 ```
@@ -46,7 +46,7 @@ make clean
 * Marathon-LB (HAProxy on steroids)
     * [http://ha.127.0.0.1.xip.io:9090/haproxy?stats](http://ha.127.0.0.1.xip.io:9090/haproxy?stats) 
     * [http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig](http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig)
-* Kibana [http://kb.127.0.0.1.xip.io:5601](http://kb.127.0.0.1.xip.io:5601) 
+* Kibana (ELK) [http://kb.127.0.0.1.xip.io:5601](http://kb.127.0.0.1.xip.io:5601) 
 
 Warm up load-balancer 
 ```bash 
@@ -63,3 +63,10 @@ TODO
 ```bash
 heroku create && git push heroku master && heroku ps:scale web=1 && curl https://pure-plateau-77452.herokuapp.com/health | jq
 ```
+or 
+```bash
+make build deploy-on-heroku
+```
+
+## OpenShift
+TODO
