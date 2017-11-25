@@ -1,1 +1,1 @@
-dg: HTTP_PORT=$PORT java -jar target/showcase-1.0.0.jar
+dg: export HTTP_PORT=$PORT && java -jar target/showcase-1.0.0.jar
