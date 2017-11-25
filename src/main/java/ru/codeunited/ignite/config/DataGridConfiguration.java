@@ -101,7 +101,8 @@ public class DataGridConfiguration {
 
         if (System.getenv("KUBERNETES_SERVICE_HOST") != null) {
             log.info("Setup kubernetes discovery SPI");
-            return new TcpDiscoverySpi().setIpFinder(new TcpDiscoveryKubernetesIpFinder());
+            return new TcpDiscoverySpi()
+                    .setIpFinder(new TcpDiscoveryKubernetesIpFinder());
 
         } else {
             log.info("Setup tcp multicast discovery SPI");
