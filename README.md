@@ -65,7 +65,7 @@ heroku create && git push heroku master && heroku ps:scale web=1 && curl https:/
 ```
 or 
 ```bash
-make build deploy-on-heroku
+make deploy-on-heroku
 ```
 
 ## OpenShift
