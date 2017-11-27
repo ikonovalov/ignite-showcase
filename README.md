@@ -36,8 +36,9 @@ make clean
 
 #### Consul & HAProxy
 * Consul dashboard [http://consul-admin.infra.127.0.0.1.xip.io](http://consul-admin.infra.127.0.0.1.xip.io)
-* HAProxy dashboard [http://proxy-admin.infra.127.0.0.1.xip.io](http://consul-admin.infra.127.0.0.1.xip.io)
-
+* HAProxy dashboard [http://proxy-admin.infra.127.0.0.1.xip.io](http://proxy-admin.infra.127.0.0.1.xip.io)
+    * curl ```curl -XGET data-grid.127.0.0.1.xip.io/node/execution-id```
+    * ab ```ab -n1000 -c100 data-grid.127.0.0.1.xip.io/node/execution-id```
 
 ## Mesosphere
 * Exhibitor/ZK UI [http://localhost:8080/exhibitor/v1/ui/index.html](http://localhost:8080/exhibitor/v1/ui/index.html)

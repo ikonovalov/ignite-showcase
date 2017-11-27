@@ -46,39 +46,3 @@ services:
       SERVICE_47100_IGNORE: 'yes'
       SERVICE_47500_IGNORE: 'yes'
       SERVICE_49112_IGNORE: 'yes'
-
-#  mongodb:
-#    image: mongo:3.4.10
-#    volumes:
-#      - "/tmp/mongo:/data/db"
-#
-#  backend:
-#    image: apacheignite/web-console-backend
-#    ports:
-#      - 3001:3001
-#    restart: on-failure
-#    environment:
-#      # Port for serving frontend API
-#      - server_port=3000
-#      # Cookie session secret
-#      - server_sessionSecret=CHANGE ME
-#      # URL for mongodb connection
-#      - mongodb_url=mongodb://mongodb/console
-#      # Port for web-agent.
-#      - agentServer_port=3001
-#      # Mail connection settings. Leave empty if no needed. See also settings, https://github.com/nodemailer/nodemailer
-#      - mail_service=
-#      - mail_sign=
-#      - mail_greeting=
-#      - mail_from=
-#      - mail_auth_user=
-#      - mail_auth_pass=
-#
-#  frontend:
-#    image: apacheignite/web-console-frontend
-#    links:
-#      # Link backend container to proxy backend requests throught nginx container.
-#      - backend:backend
-#
-#    ports:
-#      - 81:80
