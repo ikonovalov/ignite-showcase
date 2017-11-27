@@ -1,4 +1,4 @@
-
+_Launch and scale Apache Ignite application with different frameworks: Consul, Mesos, Kubernetes, Heroku and so on. And extra: dynamic configuration with Spring Config Server, logging with ELK, monitoring with Prometheus..._
 #### General: How to build and use `make`
 
 Build docker image with  application
