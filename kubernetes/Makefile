@@ -2,7 +2,7 @@
 all: minikube build deploy
 
 minikube:
-	minikube start --memory=4096 && sleep 16 && minikube dashboard
+	minikube start --memory=4096 && sleep 128 && minikube dashboard
 
 build:
 	cd ../ && mvn clean package && cd kubernetes && \
