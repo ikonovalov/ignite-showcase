@@ -29,7 +29,7 @@ import static org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscover
 @Slf4j
 public class DataGridConfiguration {
 
-    static String INSTANCE_NAME;
+    static String INSTANCE_NAME = UUID.randomUUID() + "-grid-instance";
 
     static {
         try {
@@ -50,7 +50,7 @@ public class DataGridConfiguration {
 
         CacheConfiguration[] cacheCfg = cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()]);
         return new IgniteConfiguration()
-                .setIgniteInstanceName(InetAddress.getLocalHost().getHostName() + "-grid-instance")
+                .setIgniteInstanceName(INSTANCE_NAME)
                 .setCacheConfiguration(cacheCfg)
                 .setGridLogger(logger)
                 .setDiscoverySpi(discoverySpi)

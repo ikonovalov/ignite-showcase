@@ -9,7 +9,7 @@ ignite:
 
   cache:
     my_cache:
-      preload: -1
+      preload: 100
       rebuild: false
 
 management:
