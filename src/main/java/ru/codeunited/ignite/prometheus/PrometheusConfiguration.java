@@ -1,35 +1,43 @@
-package ru.codeunited.ignite.config;
+package ru.codeunited.ignite.prometheus;
 
 import io.prometheus.client.Collector;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.MetricsServlet;
+import io.prometheus.client.exporter.PushGateway;
 import io.prometheus.client.hotspot.MemoryPoolsExports;
 import io.prometheus.client.hotspot.StandardExports;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.IOException;
 import java.util.List;
 
 @Configuration
 @ConditionalOnClass(CollectorRegistry.class)
 public class PrometheusConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean @ConditionalOnMissingBean
     public CollectorRegistry metricRegistry() {
         return CollectorRegistry.defaultRegistry;
     }
 
-    @Bean
+    @Bean @ConditionalOnClass(MetricsServlet.class)
     public ServletRegistrationBean registerPrometheusExporterServlet(CollectorRegistry metricRegistry) {
         return new ServletRegistrationBean(new MetricsServlet(metricRegistry), "/prometheus");
     }
 
+    @Bean @ConditionalOnClass(PushGateway.class)
+    public PushGateway pushGateway() throws IOException {
+        PushGateway pg = new PushGateway("127.0.0.1:9091");
+        return pg;
+    }
+
     @Bean
-    ExporterRegister exporterRegister(List<Collector> collectors) {
+    ExporterRegister exporterRegister(List<Collector> collectors, CollectorRegistry registry) throws IOException {
         return new ExporterRegister(collectors);
     }
 
