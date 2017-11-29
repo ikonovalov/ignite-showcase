@@ -16,14 +16,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/node")
+@RequestMapping("/services")
 @Slf4j
-public class NodeServiceController {
+public class ServiceController {
 
     private final Ignite ignite;
 
     @Autowired
-    public NodeServiceController(Ignite ignite) {
+    public ServiceController(Ignite ignite) {
         this.ignite = ignite;
     }
 
@@ -34,7 +34,7 @@ public class NodeServiceController {
         return nodeService.getExecutionId();
     }
 
-    @GetMapping("/services")
+    @GetMapping
     public List<String> services() {
         Collection<ServiceDescriptor> serviceDescriptors = ignite.services().serviceDescriptors();
         return serviceDescriptors

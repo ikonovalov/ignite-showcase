@@ -21,8 +21,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder.DFLT_MCAST_GROUP;
 
@@ -78,12 +77,15 @@ public class DataGridConfiguration {
             @Value("${ignite.ds.wal-arch}") String walArchPath,
             @Value("${ignite.ds.storage}") String storagePath) {
 
+        log.info("Setup data storage configuration...");
+        boolean metricEnabled = true;
         log.info("ignite.ds.wal {}", walPath);
         log.info("ignite.ds.wal-arch {}", walArchPath);
         log.info("ignite.ds.storage {}", storagePath);
+        log.info("metricEnabled = {}", metricEnabled);
 
         return new DataStorageConfiguration()
-                .setMetricsEnabled(true)
+                .setMetricsEnabled(metricEnabled)
                 .setWalArchivePath(walArchPath)
                 .setWalPath(walPath)
                 .setStoragePath(storagePath);
@@ -108,6 +110,28 @@ public class DataGridConfiguration {
             log.info("Setup tcp multicast discovery SPI");
             return new TcpDiscoverySpi()
                     .setIpFinder(new TcpDiscoveryMulticastIpFinder().setMulticastGroup(DFLT_MCAST_GROUP));
+        }
+    }
+
+    static final class IgniteNodeAttributes {
+
+        private final Map<String, String> attributes = new HashMap<>();
+
+        private IgniteNodeAttributes() {
+            super();
+        }
+
+        static IgniteNodeAttributes newInstance() {
+            return new IgniteNodeAttributes();
+        }
+
+        IgniteNodeAttributes attr(String key, String value) {
+            attributes.put(key, value);
+            return this;
+        }
+
+        Map<String, String> toMap() {
+            return Collections.unmodifiableMap(attributes);
         }
     }
 }
