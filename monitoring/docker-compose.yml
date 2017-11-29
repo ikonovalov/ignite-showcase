@@ -9,7 +9,7 @@ services:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml:ro"
 
   grafana:
-    image: grafana/grafana:master
+    image: grafana/grafana:4.6.2
     network_mode: "host"
     volumes:
       - "./grafana.ini:/etc/grafana/grafana.ini"
