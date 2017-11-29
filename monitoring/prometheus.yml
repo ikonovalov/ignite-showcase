@@ -26,10 +26,10 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['127.0.0.1:9090']
 
   - job_name: 'data-grid'
     scrape_interval: 5s
     metrics_path: '/prometheus'
     static_configs:
-      - targets: ['localhost:28080']
+      - targets: ['127.0.0.1:28080']
