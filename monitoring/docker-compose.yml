@@ -8,10 +8,6 @@ services:
     volumes:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml:ro"
 
-  pushgateway:
-    image: prom/pushgateway:v0.4.0
-    network_mode: "host"
-
   grafana:
     image: grafana/grafana:master
     network_mode: "host"
