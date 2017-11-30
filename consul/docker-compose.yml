@@ -28,6 +28,12 @@ services:
       SERVICE_8302_IGNORE: 'yes'
       SERVICE_8400_IGNORE: 'yes'
 
+  prometheus-consul-exporter:
+      image: prom/consul-exporter:master
+      command: --consul.server=consul:8500 --consul.health-summary
+      ports:
+        - "9107:9107"
+
   # Exactly one per physical node
   registrator:
     command: "-internal consul://consul:8500"
