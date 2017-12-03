@@ -14,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.codeunited.ignite.model.QuestValue;
 
 import javax.annotation.PostConstruct;
 import javax.cache.Cache;
 
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import static org.apache.ignite.cache.CacheAtomicityMode.ATOMIC;
@@ -46,6 +48,7 @@ public class MyCacheConfiguration {
     @Component @Slf4j
     public static class CacheAutomation {
 
+        public static final int MAX_AUTOGEN_CACHE_CAPACITY = 2000;
         private final Ignite ignite;
 
         @Value("${ignite.cache.my_cache.preload}")
@@ -57,6 +60,21 @@ public class MyCacheConfiguration {
         @Autowired
         public CacheAutomation(Ignite ignite) {
             this.ignite = ignite;
+        }
+
+        @Scheduled(fixedRate = 1000L)
+        public void generateCacheFlow() {
+            Random random = new Random(System.currentTimeMillis());
+            boolean needAdd = random.nextBoolean();
+            final Long key = random.nextLong() % (MAX_AUTOGEN_CACHE_CAPACITY / 2);
+            final IgniteCache<Long, QuestValue> cache = ignite.cache(MY_CACHE);
+
+            if (needAdd && cache.metrics().getSize() < MAX_AUTOGEN_CACHE_CAPACITY) {
+                QuestValue qV = QuestValue.builder().id(key).text("txt" + key).desc("desc" + key).build();
+                cache.putIfAbsent(key, qV);
+            } else {
+                cache.clear(key);
+            }
         }
 
         @PostConstruct
