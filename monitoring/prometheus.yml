@@ -1,8 +1,7 @@
 # my global config
 global:
-  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
-  # scrape_timeout is set to the global default (10s).
+  scrape_interval:     15s
+  evaluation_interval: 15s
 
 # Alertmanager configuration
 alerting:
@@ -16,8 +15,6 @@ rule_files:
   # - "first_rules.yml"
   # - "second_rules.yml"
 
-# A scrape configuration containing exactly one endpoint to scrape:
-# Here it's Prometheus itself.
 scrape_configs:
 
   - job_name: 'prometheus'
@@ -28,8 +25,7 @@ scrape_configs:
     static_configs:
        - targets: ['127.0.0.1:9107']
 
-#  - job_name: 'data-grid'
-#    scrape_interval: 5s
-#    metrics_path: '/prometheus'
-#    static_configs:
-#      - targets: ['127.0.0.1:28080', '127.0.0.1:28081']
+  - job_name: 'consul_sd'
+    consul_sd_configs:
+      - server: consul-admin.infra.127.0.0.1.xip.io
+        services: ['data-grid']

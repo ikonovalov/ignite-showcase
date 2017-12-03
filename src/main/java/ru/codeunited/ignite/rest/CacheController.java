@@ -10,22 +10,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/metric")
-public class MetricsController {
+@RequestMapping("/ignite/cache")
+public class CacheController {
 
     private final Ignite ignite;
 
     @Autowired
-    public MetricsController(Ignite ignite) {
+    public CacheController(Ignite ignite) {
         this.ignite = ignite;
     }
 
-    @GetMapping("{cache}")
+    @GetMapping("{cache}/metrics")
     @HystrixCommand(commandKey = "CacheMetrics")
-    public CacheMetrics cluster(@PathVariable("cache") String cacheName) {
+    public CacheMetrics metrics(@PathVariable("cache") String cacheName) {
         IgniteCache cache = ignite.cache(cacheName);
         if (cache !=null) {
             return cache.metrics();

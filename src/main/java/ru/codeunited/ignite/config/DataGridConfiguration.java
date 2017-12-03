@@ -54,6 +54,7 @@ public class DataGridConfiguration {
                 .setCacheConfiguration(cacheCfg)
                 .setGridLogger(logger)
                 .setDiscoverySpi(discoverySpi)
+                .setMetricsUpdateFrequency(5000L)
                 .setMetricsLogFrequency(60000 * 10)
                 .setDataStorageConfiguration(dataStorageConfiguration)
                 .setUserAttributes(

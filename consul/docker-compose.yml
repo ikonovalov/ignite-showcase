@@ -33,6 +33,8 @@ services:
       command: --consul.server=consul:8500 --consul.health-summary
       ports:
         - "9107:9107"
+      environment:
+        SERVICE_9107_IGNORE: 'yes'
 
   # Exactly one per physical node
   registrator:

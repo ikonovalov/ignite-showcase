@@ -36,11 +36,6 @@ public class QuestController {
         return ignite.cache(MY_CACHE);
     }
 
-    @GetMapping("/metrics")
-    public CacheMetrics metrics() {
-        return cache().metrics();
-    }
-
     @PostMapping("/search")
     public List<QuestValue> search(@RequestBody String queryText) {
         IgniteCache<Long, QuestValue> cache = cache();

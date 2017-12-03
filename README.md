@@ -1,4 +1,4 @@
-_Launch and scale Apache Ignite application with different frameworks: Consul, Mesos, Kubernetes, Heroku and so on. And extra: dynamic configuration with Spring Config Server, logging with ELK, monitoring with Prometheus..._
+_Launch and scale Apache Ignite application with different frameworks: Consul, Mesos, Kubernetes, Heroku and so on. And extra: dynamic configuration with Spring Config Server, logging with ELK, monitoring with Prometheus..._ or 
 #### General: How to build and use `make`
 
 Build docker image with  application
@@ -39,8 +39,9 @@ make clean
     * Scale service ```docker-compose scale ignite=3```
     * Services on the Consul ```curl http://consul-admin.infra.127.0.0.1.xip.io/v1/agent/services | jq```
 * HAProxy dashboard [http://proxy-admin.infra.127.0.0.1.xip.io](http://proxy-admin.infra.127.0.0.1.xip.io)
-    * curl ```curl -XGET data-grid.127.0.0.1.xip.io/services/execution-id```
-    * ab ```ab -n1000 -c100 data-grid.127.0.0.1.xip.io/services/execution-id```
+    * Check services:
+        + curl ```curl -XGET data-grid.127.0.0.1.xip.io/services/execution-id```
+        + ab ```ab -n1000 -c100 data-grid.127.0.0.1.xip.io/services/execution-id```
 
 ## Mesosphere
 * Exhibitor/ZK UI [http://localhost:8080/exhibitor/v1/ui/index.html](http://localhost:8080/exhibitor/v1/ui/index.html)
@@ -73,3 +74,8 @@ make deploy-on-heroku
 
 ## OpenShift
 TODO
+
+
+## Monitoring
+* Prometheus [http://prometheus.127.0.0.1.xip.io:9090](http://prometheus.127.0.0.1.xip.io:9090)
+* Grafana [http://grafana.127.0.0.1.xip.io:3000](http://grafana.127.0.0.1.xip.io:3000)
