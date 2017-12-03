@@ -4,7 +4,6 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
-import org.apache.ignite.cache.CacheMetrics;
 import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.SqlQuery;
 import org.apache.ignite.cache.query.TextQuery;
@@ -67,6 +66,7 @@ public class QuestController {
         return cache.putIfAbsent(id, value);
     }
 
+    @SuppressWarnings("SameReturnValue")
     public boolean putFallback(QuestValue value) {
         return Boolean.FALSE;
     }

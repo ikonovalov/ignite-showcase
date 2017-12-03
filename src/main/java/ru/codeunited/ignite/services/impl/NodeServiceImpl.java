@@ -30,7 +30,7 @@ public class NodeServiceImpl implements NodeService, Service {
     }
 
     @Override
-    public void execute(ServiceContext ctx) throws Exception {
+    public void execute(ServiceContext ctx) {
 
     }
 

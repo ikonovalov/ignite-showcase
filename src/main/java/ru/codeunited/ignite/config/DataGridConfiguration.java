@@ -29,7 +29,7 @@ import static org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscover
 @Slf4j
 public class DataGridConfiguration {
 
-    static String INSTANCE_NAME = UUID.randomUUID() + "-grid-instance";
+    private static String INSTANCE_NAME;
 
     static {
         try {
@@ -46,7 +46,7 @@ public class DataGridConfiguration {
             List<CacheConfiguration> cacheConfigurations,
             IgniteLogger logger,
             DiscoverySpi discoverySpi,
-            DataStorageConfiguration dataStorageConfiguration) throws UnknownHostException {
+            DataStorageConfiguration dataStorageConfiguration) {
 
         CacheConfiguration[] cacheCfg = cacheConfigurations.toArray(new CacheConfiguration[cacheConfigurations.size()]);
         return new IgniteConfiguration()
@@ -95,8 +95,7 @@ public class DataGridConfiguration {
     @Bean
     public IgniteLogger gridLogger() {
         Logger logger = LoggerFactory.getLogger("org.apache.ignite");
-        Slf4jLogger slf4jLogger = new Slf4jLogger(logger);
-        return slf4jLogger;
+        return new Slf4jLogger(logger);
     }
 
     @Bean

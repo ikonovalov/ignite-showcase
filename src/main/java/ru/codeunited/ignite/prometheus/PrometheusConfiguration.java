@@ -18,6 +18,7 @@ import java.util.List;
 @ConditionalOnClass(CollectorRegistry.class)
 public class PrometheusConfiguration {
 
+    @SuppressWarnings("SameReturnValue")
     @Bean @ConditionalOnMissingBean
     public CollectorRegistry metricRegistry() {
         return CollectorRegistry.defaultRegistry;
@@ -29,7 +30,7 @@ public class PrometheusConfiguration {
     }
 
     @Bean
-    ExporterRegister exporterRegister(List<Collector> collectors, CollectorRegistry registry) throws IOException {
+    ExporterRegister exporterRegister(List<Collector> collectors, CollectorRegistry registry) {
         return new ExporterRegister(collectors);
     }
 
@@ -45,7 +46,7 @@ public class PrometheusConfiguration {
 
     public static class ExporterRegister {
 
-        private List<Collector> collectors;
+        private final List<Collector> collectors;
 
         public ExporterRegister(List<Collector> collectors) {
             for (Collector collector : collectors) {

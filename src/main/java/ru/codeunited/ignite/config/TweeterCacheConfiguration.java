@@ -6,7 +6,6 @@ import org.apache.ignite.cache.affinity.AffinityFunction;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.codeunited.ignite.model.QuestValue;
 import ru.codeunited.ignite.model.Tweet;
 
 import static org.apache.ignite.cache.CacheAtomicityMode.ATOMIC;

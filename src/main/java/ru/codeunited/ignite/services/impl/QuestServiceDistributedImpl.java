@@ -29,14 +29,14 @@ public class QuestServiceDistributedImpl implements QuestService, Service {
     }
 
     @Override
-    public void init(ServiceContext ctx) throws Exception {
+    public void init(ServiceContext ctx) {
         cache = ignite.cache(MyCacheConfiguration.MY_CACHE);
         svcName = ctx.name();
         log.info("Service {} init() done.", svcName);
     }
 
     @Override
-    public void execute(ServiceContext ctx) throws Exception {
+    public void execute(ServiceContext ctx) {
         log.info("Executing distributed service: {}", svcName);
     }
 
