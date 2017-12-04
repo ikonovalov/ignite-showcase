@@ -55,7 +55,6 @@ public class DataGridConfiguration {
                 .setIgniteInstanceName(INSTANCE_NAME)
                 .setCacheConfiguration(cacheCfg)
                 .setGridLogger(logger)
-                .setPeerClassLoadingEnabled(true)
                 .setDiscoverySpi(discoverySpi)
                 .setMetricsUpdateFrequency(5000L)
                 .setMetricsLogFrequency(60000 * 10)

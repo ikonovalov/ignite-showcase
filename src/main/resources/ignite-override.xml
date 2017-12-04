@@ -5,15 +5,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!--<bean id="igniteConfiguration" class="org.apache.ignite.configuration.IgniteConfiguration">-->
-        <!--<property name="peerClassLoadingEnabled" value="true"/>-->
-        <!--<property name="cacheConfiguration">-->
-            <!--<array>-->
-                <!--<ref bean="myCacheConfig"/>-->
-                <!--<ref bean="tweeterCacheConfig"/>-->
-            <!--</array>-->
-        <!--</property>-->
-    <!--</bean>-->
     <bean id="gridLogger" class="org.apache.ignite.logger.slf4j.Slf4jLogger"/>
     <bean id="affinityFunction" class="org.apache.ignite.cache.affinity.rendezvous.RendezvousAffinityFunction">
         <property name="partitions" value="32"/>
