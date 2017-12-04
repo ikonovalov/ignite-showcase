@@ -18,6 +18,7 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -26,6 +27,7 @@ import java.util.*;
 import static org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder.DFLT_MCAST_GROUP;
 
 @Configuration
+@ImportResource("classpath:ignite-override.xml")
 @Slf4j
 public class DataGridConfiguration {
 
@@ -53,6 +55,7 @@ public class DataGridConfiguration {
                 .setIgniteInstanceName(INSTANCE_NAME)
                 .setCacheConfiguration(cacheCfg)
                 .setGridLogger(logger)
+                .setPeerClassLoadingEnabled(true)
                 .setDiscoverySpi(discoverySpi)
                 .setMetricsUpdateFrequency(5000L)
                 .setMetricsLogFrequency(60000 * 10)

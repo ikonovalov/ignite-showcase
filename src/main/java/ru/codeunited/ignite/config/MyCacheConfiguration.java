@@ -33,7 +33,7 @@ public class MyCacheConfiguration {
     public static final String MY_CACHE = "MyCache";
 
     @Bean
-    public CacheConfiguration<Long, QuestValue> longQuestValueCacheConfiguration(AffinityFunction affinityFunction) {
+    public CacheConfiguration<Long, QuestValue> myCacheConfig(AffinityFunction affinityFunction) {
         CacheConfiguration<Long, QuestValue> cacheConfiguration = new CacheConfiguration<>(MY_CACHE);
         cacheConfiguration.setAtomicityMode(ATOMIC);
         cacheConfiguration.setCacheMode(PARTITIONED);
