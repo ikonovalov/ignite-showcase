@@ -24,7 +24,7 @@ public class ServersOnlyClusterGroupSelector implements ClusterGroupSelectorStra
 
     @Override
     public ClusterGroup select() {
-        return ignite.cluster().forServers();
+        return ignite.cluster().forServers().forAttribute("service_allowed", true);
     }
 
     @Override

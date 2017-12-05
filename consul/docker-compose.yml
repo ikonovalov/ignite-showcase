@@ -54,11 +54,3 @@ services:
       SERVICE_47100_IGNORE: 'yes'
       SERVICE_47500_IGNORE: 'yes'
       SERVICE_49112_IGNORE: 'yes'
-
-  ignite-server:
-    image: apacheignite/ignite:2.3.0
-    environment:
-      SERVICE_11211_IGNORE: 'yes'
-      SERVICE_47100_IGNORE: 'yes'
-      SERVICE_47500_IGNORE: 'yes'
-      SERVICE_49112_IGNORE: 'yes'

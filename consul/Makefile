@@ -13,6 +13,3 @@ down:
 	docker-compose down
 clean: down
 	docker volume prune --force
-
-visor:
-	docker-compose exec ignite-server bash -c './apache-ignite-fabric-2.3.0-bin/bin/ignitevisorcmd.sh'

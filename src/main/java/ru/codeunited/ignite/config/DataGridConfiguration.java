@@ -54,6 +54,7 @@ public class DataGridConfiguration {
         return new IgniteConfiguration()
                 .setIgniteInstanceName(INSTANCE_NAME)
                 .setCacheConfiguration(cacheCfg)
+                .setPeerClassLoadingEnabled(true)
                 .setGridLogger(logger)
                 .setDiscoverySpi(discoverySpi)
                 .setMetricsUpdateFrequency(5000L)
@@ -62,6 +63,7 @@ public class DataGridConfiguration {
                 .setUserAttributes(
                         IgniteNodeAttributes.newInstance()
                                 .attr("node_type", "storage-service")
+                                .attr("service_allowed", true)
                                 .toMap()
                 );
     }
@@ -117,7 +119,7 @@ public class DataGridConfiguration {
 
     static final class IgniteNodeAttributes {
 
-        private final Map<String, String> attributes = new HashMap<>();
+        private final Map<String, Object> attributes = new HashMap<>();
 
         private IgniteNodeAttributes() {
             super();
@@ -127,12 +129,12 @@ public class DataGridConfiguration {
             return new IgniteNodeAttributes();
         }
 
-        IgniteNodeAttributes attr(String key, String value) {
+        IgniteNodeAttributes attr(String key, Object value) {
             attributes.put(key, value);
             return this;
         }
 
-        Map<String, String> toMap() {
+        Map<String, Object> toMap() {
             return Collections.unmodifiableMap(attributes);
         }
     }
