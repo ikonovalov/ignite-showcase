@@ -25,7 +25,7 @@ public class PrometheusConfiguration {
     }
 
     @Bean @ConditionalOnClass(MetricsServlet.class)
-    public ServletRegistrationBean registerPrometheusExporterServlet(CollectorRegistry metricRegistry) {
+    ServletRegistrationBean registerPrometheusExporterServlet(CollectorRegistry metricRegistry) {
         return new ServletRegistrationBean(new MetricsServlet(metricRegistry), "/metrics");
     }
 
