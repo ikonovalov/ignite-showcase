@@ -1,0 +1,8 @@
+version: '2.1'
+
+services:
+
+  origin:
+    image: openshift/origin:v3.7.0
+    command: 'start'
+
