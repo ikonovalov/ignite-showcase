@@ -17,8 +17,7 @@ services:
 
   # Only one for the whole cluster
   consul:
-    command: -server -bootstrap
-    image: progrium/consul:latest
+    image: consul:1.0.1
     container_name: 'consul'
     environment:
       SERVICE_8500_NAME: 'consul-admin_infra'
@@ -27,6 +26,7 @@ services:
       SERVICE_8301_IGNORE: 'yes'
       SERVICE_8302_IGNORE: 'yes'
       SERVICE_8400_IGNORE: 'yes'
+      SERVICE_8600_IGNORE: 'yes'
 
   prometheus-consul-exporter:
       image: prom/consul-exporter:master
