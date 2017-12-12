@@ -16,5 +16,11 @@ management:
   security:
     enabled: false
 
+consul:
+  url: ${consul_url:localhost"}
+  tags:
+    - 'MSK'
+    - 'server-node'
+
 server:
   port: ${http_port:28080}
