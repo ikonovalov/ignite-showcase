@@ -1,4 +1,4 @@
-package ru.codeunited.ignite.prometheus;
+package ru.codeunited.ignite.monitoring;
 
 import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;

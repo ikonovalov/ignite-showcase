@@ -1,4 +1,4 @@
-package ru.codeunited.ignite.prometheus;
+package ru.codeunited.ignite.monitoring;
 
 import io.prometheus.client.Collector;
 import io.prometheus.client.CollectorRegistry;
@@ -11,7 +11,6 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
 import java.util.List;
 
 @Configuration

@@ -5,6 +5,7 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.resources.IgniteInstanceResource;
 import org.apache.ignite.services.Service;
 import org.apache.ignite.services.ServiceContext;
+import org.springframework.cloud.sleuth.annotation.NewSpan;
 import ru.codeunited.ignite.services.NodeService;
 
 import java.net.InetAddress;
