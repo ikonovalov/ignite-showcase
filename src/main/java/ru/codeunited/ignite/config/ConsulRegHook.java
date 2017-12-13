@@ -45,9 +45,6 @@ public class ConsulRegHook {
         this.consulSetting = consulSetting;
     }
 
-    public void prepareServiceInfo() {
-
-    }
 
     @PostConstruct
     public void registration() {
@@ -55,13 +52,21 @@ public class ConsulRegHook {
             ConsulClient client = new ConsulClient(consulSetting.getUrl());
             String hostAddress = InetAddress.getLocalHost().getHostAddress();
 
+            this.service.setId(hostAddress + ":" + serverPort);
             this.service.setName(SERVICE_NAME);
             this.service.setTags(consulSetting.getTags());
             this.service.setPort(Integer.valueOf(serverPort));
-            this.service.setId(hostAddress + ":" + serverPort);
             this.service.setAddress(hostAddress);
-            client.agentServiceRegister(service);
+
+            NewService.Check check = new NewService.Check();
+            check.setHttp("http://" + hostAddress + ":" + serverPort + "/health");
+            check.setInterval("10s");
+            check.setTimeout("2s");
+            this.service.setCheck(check);
+
+            client.agentServiceRegister(this.service);
             log.info("Registered as \n{}", service);
+
         } catch (UnknownHostException e) {
             log.error("Can't determinate hostname. ", e);
         } catch (Exception e) {
@@ -70,9 +75,9 @@ public class ConsulRegHook {
     }
 
     @PreDestroy
-    public void deRegistration() {
-        ConsulClient client = new ConsulClient(consulSetting.getUrl());
-        client.agentServiceDeregister(service.getId());
+    public void unregistered() {
+        log.info("Undo registration service ID:{}", service.getId());
+        ConsulClient client1 = new ConsulClient(consulSetting.getUrl());
+        client1.agentServiceDeregister(service.getId());
     }
-
 }
