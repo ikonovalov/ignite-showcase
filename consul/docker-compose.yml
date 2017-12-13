@@ -50,7 +50,8 @@ services:
   ignite:
     image: codeunited/ignite-showcase:1.0.0
     environment:
-      CONSUL_URL: 'http://consul:8500'
+      CONSUL_HOST: 'consul'
+      CONSUL_PORT: 8500
       SERVICE_28080_IGNORE: 'yes'
       SERVICE_11211_IGNORE: 'yes'
       SERVICE_47100_IGNORE: 'yes'

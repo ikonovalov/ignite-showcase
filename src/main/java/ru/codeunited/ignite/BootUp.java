@@ -8,6 +8,7 @@ import org.apache.ignite.configuration.IgniteConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 )
 @EnableCircuitBreaker
 @EnableHystrixDashboard
+@EnableDiscoveryClient
 @Slf4j
 public class BootUp {
 
