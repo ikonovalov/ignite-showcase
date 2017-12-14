@@ -1,7 +1,7 @@
 FROM openjdk:8-jre-alpine
 LABEL maintainer="konovalov84@gmail.com"
 
-ADD showcase.jar /opt/ignite/showcase.jar
+COPY showcase.jar /opt/ignite/showcase.jar
 
 VOLUME ["/var/ignite/ds"]
 
