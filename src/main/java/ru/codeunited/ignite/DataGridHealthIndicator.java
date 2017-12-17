@@ -2,11 +2,13 @@ package ru.codeunited.ignite;
 
 import org.apache.ignite.Ignite;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.ConditionalOnEnabledHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnEnabledHealthIndicator("data-grid")
 public class DataGridHealthIndicator implements HealthIndicator {
 
     private final Ignite ignite;

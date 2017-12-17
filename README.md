@@ -40,8 +40,8 @@ make clean
     * Services on the Consul ```curl http://consul-admin.infra.127.0.0.1.xip.io/v1/agent/services | jq```
 * HAProxy dashboard [http://proxy-admin.infra.127.0.0.1.xip.io](http://proxy-admin.infra.127.0.0.1.xip.io)
     * Check services:
-        + curl ```curl -XGET data-grid.127.0.0.1.xip.io/services/execution-id```
-        + ab ```ab -n1000 -c100 data-grid.127.0.0.1.xip.io/services/execution-id```
+        + curl ```curl -XGET dg.127.0.0.1.xip.io/services/execution-id```
+        + ab ```ab -n1000 -c100 dg.127.0.0.1.xip.io/services/execution-id```
 
 ## Mesosphere
 * Exhibitor/ZK UI [http://localhost:8080/exhibitor/v1/ui/index.html](http://localhost:8080/exhibitor/v1/ui/index.html)

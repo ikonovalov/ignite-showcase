@@ -20,6 +20,7 @@ services:
     image: consul:1.0.1
     container_name: 'consul'
     environment:
+      CONSUL_LOCAL_CONFIG: '{"datacenter":"MOSCOW", "server":true, "enable_debug":false}'
       SERVICE_8500_NAME: 'consul-admin_infra'
       SERVICE_53_IGNORE: 'yes'
       SERVICE_8300_IGNORE: 'yes'
@@ -49,7 +50,9 @@ services:
   ignite:
     image: codeunited/ignite-showcase:1.0.0
     environment:
-      SERVICE_28080_NAME: 'data-grid'
+      CONSUL_HOST: 'consul'
+      CONSUL_PORT: 8500
+      SERVICE_28080_IGNORE: 'yes'
       SERVICE_11211_IGNORE: 'yes'
       SERVICE_47100_IGNORE: 'yes'
       SERVICE_47500_IGNORE: 'yes'

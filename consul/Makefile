@@ -18,4 +18,4 @@ clean: down
 	docker volume prune --force
 
 stress:
-	ab -n1000 -c100 data-grid.127.0.0.1.xip.io/services/execution-id
+	ab -n1000 -c100 dg.127.0.0.1.xip.io/services/execution-id

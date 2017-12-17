@@ -1,3 +1,21 @@
 spring:
   application:
     name: data-grid
+  cloud:
+    consul:
+      host: ${consul_host:localhost}
+      port: ${consul_port:8500}
+      discovery:
+        # See ConsulDiscoveryProperties
+        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+        serviceName: dg
+        healthCheckInterval: 15s
+        preferIpAddress: true
+        tags: foo=bar, baz
+      config:
+        failFast: false
+
+management:
+  health:
+    consul:
+      enabled: false
