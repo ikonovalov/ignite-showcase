@@ -6,8 +6,11 @@ spring:
       host: ${consul_host:localhost}
       port: ${consul_port:8500}
       discovery:
+        # See ConsulDiscoveryProperties
         instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+        serviceName: dg
         healthCheckInterval: 15s
+        preferIpAddress: true
         tags: foo=bar, baz
       config:
         failFast: false
