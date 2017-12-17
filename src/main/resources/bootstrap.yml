@@ -6,4 +6,13 @@ spring:
       host: ${consul_host:localhost}
       port: ${consul_port:8500}
       discovery:
+        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+        healthCheckInterval: 15s
         tags: foo=bar, baz
+      config:
+        failFast: false
+
+management:
+  health:
+    consul:
+      enabled: false
