@@ -12,7 +12,6 @@ spring:
         healthCheckInterval: 15s
         preferIpAddress: true
         tags: foo=bar, baz
-      config:
         failFast: false
 
 management:
