@@ -48,8 +48,9 @@ public class GrpcServer {
     public void prepareServiceRegistration() throws UnknownHostException {
         if (serviceRegistry.isPresent() && discoveryProperties.isPresent() && bootRegistration.isPresent()) {
             NewService gRpcService = new NewService();
-            gRpcService.setId(bootRegistration.get().getServiceId() + "-gRpc");
-            gRpcService.setName("gRPC");
+            ConsulRegistration bootConsulRegistration = bootRegistration.get();
+            gRpcService.setId(bootConsulRegistration.getInstanceId() + "-gRpc");
+            gRpcService.setName(bootConsulRegistration.getServiceId() + "-gRpc");
             gRpcService.setAddress(InetAddress.getLocalHost().getHostAddress());
             gRpcService.setPort(port);
             ConsulRegistration cr = new ConsulRegistration(gRpcService, discoveryProperties.get());
