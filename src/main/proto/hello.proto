@@ -2,23 +2,22 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "ru.codeunited.ignite.proto";
-option java_outer_classname = "HelloWorldProto";
+option java_outer_classname = "DataGridCachesProto";
 option objc_class_prefix = "HLW";
 
 package helloworld;
 
 // The greeting service definition.
-service Greeter {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+service DataGridCaches {
+    // Sends a greeting
+    rpc AvailableCaches (AvailableCachesRequest) returns (AvailableCachesReply) {
+    }
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+message AvailableCachesRequest {
+    uint32 max_results = 1;
 }
 
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
+message AvailableCachesReply {
+    repeated string cache = 1;
 }
