@@ -45,21 +45,6 @@ public class GrpcServer {
     private int port;
 
     @PostConstruct
-    public void prepareServiceRegistration() throws UnknownHostException {
-        if (serviceRegistry.isPresent() && discoveryProperties.isPresent() && bootRegistration.isPresent()) {
-            NewService gRpcService = new NewService();
-            ConsulRegistration bootConsulRegistration = bootRegistration.get();
-            gRpcService.setId(bootConsulRegistration.getInstanceId() + "-gRpc");
-            gRpcService.setName(bootConsulRegistration.getServiceId() + "-gRpc");
-            gRpcService.setAddress(InetAddress.getLocalHost().getHostAddress());
-            gRpcService.setPort(port);
-            ConsulRegistration cr = new ConsulRegistration(gRpcService, discoveryProperties.get());
-            gRpcServiceRegistration.compareAndSet(null, cr);
-            log.debug("Prepare gRPC service registration: {}", cr);
-        }
-    }
-
-    @PostConstruct
     public void start() throws IOException {
         ServerBuilder serverBuilder = ServerBuilder.forPort(port);
         gRpcServices.forEach(serverBuilder::addService);
@@ -67,8 +52,6 @@ public class GrpcServer {
                 .build()
                 .start();
         log.info("gRPC server started, listening on {}", port);
-
-        serviceRegistry.ifPresent(registry -> registry.register(gRpcServiceRegistration.get()));
     }
 
     @PreDestroy
@@ -80,4 +63,22 @@ public class GrpcServer {
             serviceRegistry.ifPresent(registry -> registry.deregister(gRpcServiceRegistration.get()));
         }
     }
+
+    @PostConstruct
+    public void prepareServiceRegistration() throws UnknownHostException {
+        if (serviceRegistry.isPresent() && discoveryProperties.isPresent() && bootRegistration.isPresent()) {
+            NewService gRpcService = new NewService();
+            ConsulRegistration bootConsulRegistration = bootRegistration.get();
+            gRpcService.setId(bootConsulRegistration.getInstanceId() + "-gRpc");
+            gRpcService.setName(bootConsulRegistration.getServiceId() + "-gRpc");
+            gRpcService.setAddress(InetAddress.getLocalHost().getHostAddress());
+            gRpcService.setPort(port);
+            ConsulRegistration cr = new ConsulRegistration(gRpcService, discoveryProperties.get());
+            gRpcServiceRegistration.compareAndSet(null, cr);
+            serviceRegistry.ifPresent(registry -> registry.register(gRpcServiceRegistration.get()));
+            log.debug("Prepare gRPC service registration: {}", cr);
+        }
+    }
+
+
 }
