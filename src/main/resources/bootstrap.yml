@@ -11,7 +11,7 @@ spring:
         serviceName: dg
         healthCheckInterval: 15s
         preferIpAddress: true
-        tags: foo=bar, baz
+        tags: http=v1, ignite-ha
         failFast: false
 
 management:

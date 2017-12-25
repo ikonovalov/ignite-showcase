@@ -1,4 +1,4 @@
-_Launch and scale Apache Ignite application with different frameworks: Consul, Mesos, Kubernetes, Heroku and so on. And extra: dynamic configuration with Spring Config Server, logging with ELK, monitoring with Prometheus..._ or 
+_Launch and scale Apache Ignite application with different frameworks: Consul, Mesos, Kubernetes, Heroku and so on. And extra: dynamic configuration with Spring Config Server, logging with ELK, monitoring with Prometheus..._ or
 #### General: How to build and use `make`
 
 Build docker image with  application
@@ -20,7 +20,7 @@ _Deploy grid instance (Marathon app for instance)_
 make deploy
 ```
 
-Cleanup 
+Cleanup
 ```bash
 make clean
 ```
@@ -48,17 +48,26 @@ make clean
 * Mesos dashboard [http://mesos.127.0.0.1.xip.io:5050/#/](http://mesos.127.0.0.1.xip.io:5050/#/)
 * Marathon dashboard [marathon.127.0.0.1.xip.io:8081/#/](http://marathon.127.0.0.1.xip.io:8081)
 * Marathon-LB (HAProxy on steroids)
-    * [http://ha.127.0.0.1.xip.io:9090/haproxy?stats](http://ha.127.0.0.1.xip.io:9090/haproxy?stats) 
+    * [http://ha.127.0.0.1.xip.io:9090/haproxy?stats](http://ha.127.0.0.1.xip.io:9090/haproxy?stats)
     * [http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig](http://ha.127.0.0.1.xip.io:9090/_haproxy_getconfig)
-* Kibana (ELK) [http://kb.127.0.0.1.xip.io:5601](http://kb.127.0.0.1.xip.io:5601) 
+* Kibana (ELK) [http://kb.127.0.0.1.xip.io:5601](http://kb.127.0.0.1.xip.io:5601)
 
-Warm up load-balancer 
-```bash 
+Warm up load-balancer
+```bash
 ab -n200 -c60 http://dg.127.0.0.1.xip.io/quest/1
 ```
 
 ## Kubernetes
-TODO
+With none driver and after
+```bash
+sudo minikube start --vm-driver=none
+```
+
+```bash
+sudo chown -R $USER:$USER ~/.minikube
+sudo chown -R $USER:$USER ~/.kube
+minikube dashboard
+```
 
 ## Nomand
 TODO
@@ -67,7 +76,7 @@ TODO
 ```bash
 heroku create && git push heroku master && heroku ps:scale web=1 && curl https://pure-plateau-77452.herokuapp.com/health | jq
 ```
-or 
+or
 ```bash
 make deploy-on-heroku
 ```

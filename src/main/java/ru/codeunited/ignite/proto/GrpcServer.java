@@ -17,6 +17,8 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -52,27 +54,20 @@ public class GrpcServer {
                 .build()
                 .start();
         log.info("gRPC server started, listening on {}", port);
+
+        silentConsulRegistration();
     }
 
-    @PreDestroy
-    public void stop() {
-        log.info("Stop gRPC server");
-        if (server != null) {
-            server.shutdown();
-            log.debug("gRPC server stopped");
-            serviceRegistry.ifPresent(registry -> registry.deregister(gRpcServiceRegistration.get()));
-        }
-    }
-
-    @PostConstruct
-    public void prepareServiceRegistration() throws UnknownHostException {
+    private void silentConsulRegistration() throws UnknownHostException {
+        // TODO: Add propertie for enable/disable
         if (serviceRegistry.isPresent() && discoveryProperties.isPresent() && bootRegistration.isPresent()) {
             NewService gRpcService = new NewService();
             ConsulRegistration bootConsulRegistration = bootRegistration.get();
             gRpcService.setId(bootConsulRegistration.getInstanceId() + "-gRpc");
             gRpcService.setName(bootConsulRegistration.getServiceId() + "-gRpc");
-            gRpcService.setAddress(InetAddress.getLocalHost().getHostAddress());
+            gRpcService.setAddress(bootConsulRegistration.getHost());
             gRpcService.setPort(port);
+            gRpcService.setTags(Collections.singletonList("#grpcserver"));
             ConsulRegistration cr = new ConsulRegistration(gRpcService, discoveryProperties.get());
             gRpcServiceRegistration.compareAndSet(null, cr);
             serviceRegistry.ifPresent(registry -> registry.register(gRpcServiceRegistration.get()));
@@ -80,5 +75,15 @@ public class GrpcServer {
         }
     }
 
+    @PreDestroy
+    public void stop() {
+        log.info("Stop gRPC server");
+        if (server != null) {
+            server.shutdown();
+            log.info("gRPC server stopped");
+            serviceRegistry.ifPresent(registry -> registry.deregister(gRpcServiceRegistration.get()));
+            log.info("gRPC server deregistered");
+        }
+    }
 
 }
