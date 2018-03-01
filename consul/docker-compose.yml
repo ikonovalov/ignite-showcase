@@ -57,3 +57,4 @@ services:
       SERVICE_47100_IGNORE: 'yes'
       SERVICE_47500_IGNORE: 'yes'
       SERVICE_49112_IGNORE: 'yes'
+      SERVICE_50051_IGNORE: 'yes'

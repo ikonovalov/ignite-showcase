@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ru.codeunited.ignite.proto";
+option java_outer_classname = "DataGridCachesProto";
+option objc_class_prefix = "HLW";
+
+package helloworld;
+
+// The greeting service definition.
+service DataGridCaches {
+    // Sends a greeting
+    rpc AvailableCaches (AvailableCachesRequest) returns (AvailableCachesReply) {
+    }
+}
+
+message AvailableCachesRequest {
+    uint32 max_results = 1;
+}
+
+message AvailableCachesReply {
+    repeated string cache = 1;
+}
