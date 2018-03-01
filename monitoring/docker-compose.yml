@@ -3,15 +3,16 @@ version: '2.1'
 services:
 
   prometheus:
-    image: prom/prometheus:v2.0.0
+    image: prom/prometheus:v2.1.0
     network_mode: "host"
     volumes:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml:ro"
 
   grafana:
-    image: grafana/grafana:master
+    image: grafana/grafana:5.0.0
     network_mode: "host"
     volumes:
       - "./grafana.ini:/etc/grafana/grafana.ini"
-      - "./grafana-datasources.yml:/etc/grafana/datasources/prometheus.yml"
+      - "./grafana-datasources.yml:/etc/grafana/provisioning/datasources/prometheus.yml"
+      - "./grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/provider.yml"
       - "./dashboards:/etc/grafana/dashborads"
