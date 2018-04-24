@@ -1,8 +1,15 @@
-
 all: minikube build deploy
 
-minikube:
-	minikube start --memory=4096 && sleep 128 && minikube dashboard
+mini-start:
+	minikube start --memory=4096
+
+mini-start-none-driver:
+	sudo minikube start --vm-driver=none && \
+	sudo chown -R $USER:$USER ~/.minikube && \
+	sudo chown -R $USER:$USER ~/.kube
+
+mini-delete:
+	sudo minikube delete
 
 build:
 	cd ../ && mvn clean package && cd kubernetes && \

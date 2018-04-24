@@ -6,7 +6,7 @@ metadata:
 spec:
   type:	NodePort
   ports:
-    - port: 8080
+    - port: 28080
       nodePort: 30300
   selector:
     app: ignite-showcase
@@ -20,7 +20,7 @@ metadata:
   labels:
     app: ignite-showcase
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: ignite-showcase
@@ -32,9 +32,9 @@ spec:
       containers:
       - name: ignite-showcase
         imagePullPolicy: Never
-        image: codeunited/ignite-showcase:latest
+        image: codeunited/ignite-showcase:1.0.0
         ports:
-          - containerPort: 8080
+          - containerPort: 28080
           - containerPort: 11211
           - containerPort: 47100
           - containerPort: 47500
