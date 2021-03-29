@@ -35,7 +35,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <ignite.version>2.3.0</ignite.version>
+        <ignite.version>2.10.0</ignite.version>
         <h2.version>1.4.195</h2.version>
         <jetty.version>9.2.11.v20150529</jetty.version>
         <lombok.version>1.16.16</lombok.version>
